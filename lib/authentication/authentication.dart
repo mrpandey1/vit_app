@@ -14,7 +14,7 @@ class MyAuth implements AuthFunc {
 
   @override
   Future<User> getCurrentUser() async {
-    return await _firebaseAuth.currentUser;
+    return _firebaseAuth.currentUser;
   }
 
   @override
@@ -41,7 +41,7 @@ class MyAuth implements AuthFunc {
 
   @override
   Future<bool> isEmailVerified() async {
-    var user = await _firebaseAuth.currentUser;
+    var user = _firebaseAuth.currentUser;
     return user.emailVerified;
   }
 
