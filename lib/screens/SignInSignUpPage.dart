@@ -50,7 +50,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         setState(() {
           _isLoading = false;
         });
-        if (userId.length > 0 && userId != null && _formKey == STATE.SIGNIN)
+        if (userId.length > 0 && userId != null && _formState == STATE.SIGNIN)
           widget.onSignIn();
       } catch (e) {
         print(e);
