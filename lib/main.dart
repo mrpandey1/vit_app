@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/screens/HomePage.dart';
-import 'package:vit_app/screens/SignInSignUpPage.dart';
-
-import 'authentication/authentication.dart';
+import 'package:vit_app/src/authentication/authentication.dart';
+import 'package:vit_app/src/constants.dart';
+import 'package:vit_app/src/screens/HomePage.dart';
+import 'package:vit_app/src/screens/SignInSignUpPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'My_APP',
+      title: 'VIT',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'mont',
+        primaryColor: kPrimaryColor,
+      ),
       home: new MyAppHome(auth: new MyAuth()),
     );
   }
@@ -23,7 +28,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppHome extends StatefulWidget {
   MyAppHome({this.auth});
-  AuthFunc auth;
+  final AuthFunc auth;
   @override
   State<StatefulWidget> createState() => _MyAppHomeState();
 }
@@ -99,7 +104,9 @@ Widget _showLoading() {
   return Scaffold(
     body: Container(
       alignment: Alignment.center,
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        backgroundColor: kPrimaryColor,
+      ),
     ),
   );
 }
