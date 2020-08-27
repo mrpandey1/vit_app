@@ -62,6 +62,10 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             _errormessage = e.message;
         });
       }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -239,7 +243,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           hintText: 'Enter Password',
           icon: Icon(Icons.mail, color: Colors.grey),
         ),
-        validator: (value) => value.isEmpty ? 'Email can not be empty' : null,
+        validator: (value) =>
+            !value.endsWith('@vit.edu.in') ? 'Email is badly fomatted' : null,
         onSaved: (value) => _email = value.trim(),
       ),
     );
