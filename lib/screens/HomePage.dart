@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   void _showVerifyEmailDialog() {
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Please verify your email'),
@@ -38,7 +39,7 @@ class _HomePageState extends State<HomePage> {
             actions: <Widget>[
               new FlatButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    _signOut();
                     _sendverifyEmail();
                   },
                   child: Text('Send')),
