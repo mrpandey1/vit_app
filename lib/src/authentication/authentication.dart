@@ -28,7 +28,8 @@ class MyAuth implements AuthFunc {
     var user = (await _firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password))
         .user;
-    return user.uid;
+
+    return user.emailVerified ? user.uid : null;
   }
 
   @override
