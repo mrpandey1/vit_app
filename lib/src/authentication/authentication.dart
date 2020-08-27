@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+final userRef = FirebaseFirestore.instance.collection('users');
 
 abstract class AuthFunc {
   Future<String> signIn(String email, String password);
@@ -37,6 +40,16 @@ class MyAuth implements AuthFunc {
     var user = (await _firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password))
         .user;
+
+    await userRef.doc(user.uid).set({
+      'id': user.uid,
+      'email': user.email,
+      'admin': false,
+      'timestamp': DateTime.now(),
+      'DisplayName':
+          '${user.email.split('@')[0].split('.')[0]} ${user.email.split('@')[0].split('.')[1]}'
+    });
+
     return user.uid;
   }
 
