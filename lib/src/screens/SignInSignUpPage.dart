@@ -24,6 +24,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   STATE _formState = STATE.SIGNIN;
   bool _isIos, _isLoading;
 
+  void _clearControllers() {
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,10 +46,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       content: Text('Reset link sent to ' + email),
       backgroundColor: Colors.green,
     );
-    await widget.auth
-        .sendPasswordResetLink(email)
-        .then((value) => {_scaffoldKey.currentState.showSnackBar(snackBar2)})
-        .catchError((e) => {_scaffoldKey.currentState.showSnackBar(snackBar)});
+    await widget.auth.sendPasswordResetLink(email).then((value) {
+      _scaffoldKey.currentState.showSnackBar(snackBar2);
+      _clearControllers();
+      _changeFormToSignIn();
+    }).catchError((e) => {_scaffoldKey.currentState.showSnackBar(snackBar)});
   }
 
   bool _validateAndSave() {
@@ -66,7 +73,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         if (_formState == STATE.SIGNIN) {
           userId = await widget.auth.signIn(
               emailController.text.trim(), passwordController.text.trim());
-
+          _clearControllers();
           if (userId == null) {
             setState(() {
               _isLoading = false;
@@ -82,6 +89,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               emailController.text.trim(), passwordController.text.trim());
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
+          _clearControllers();
         } else {
           //reset goes here
 
