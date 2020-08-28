@@ -151,6 +151,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     setState(() {
       _formState = STATE.SIGNUP;
     });
+    _clearControllers();
   }
 
   void _changeFormToSignIn() {
@@ -159,6 +160,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     setState(() {
       _formState = STATE.SIGNIN;
     });
+    _clearControllers();
   }
 
   void _changeFormToReset() {
@@ -167,6 +169,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     setState(() {
       _formState = STATE.RESET;
     });
+    _clearControllers();
   }
 
   @override
