@@ -46,6 +46,7 @@ class MyAuth implements AuthFunc {
       'id': user.uid,
       'email': user.email,
       'admin': false,
+      'isRegistered': false,
       'timestamp': DateTime.now(),
       'DisplayName':
           '${user.email.split('@')[0].split('.')[0]} ${user.email.split('@')[0].split('.')[1]}'

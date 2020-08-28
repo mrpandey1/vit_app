@@ -60,7 +60,6 @@ class _MyAppHomeState extends State<MyAppHome> {
 
   @override
   Widget build(BuildContext context) {
-    print(authStatus);
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         return _showLoading();
@@ -78,6 +77,7 @@ class _MyAppHomeState extends State<MyAppHome> {
         else
           return _showLoading();
         break;
+
       default:
         return _showLoading();
         break;

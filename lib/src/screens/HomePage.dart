@@ -1,5 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
+import 'package:vit_app/src/model/user.dart';
+import 'package:vit_app/src/screens/StudentRegistration.dart';
+
+final userRef = FirebaseFirestore.instance.collection('users');
+VITUser currentUser;
 
 class HomePage extends StatefulWidget {
   final AuthFunc auth;
@@ -17,6 +24,19 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    userRef
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      currentUser = VITUser.fromDocument(documentSnapshot);
+      if (!currentUser.isRegistered) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StudentRegistration()),
+        );
+      }
+    });
   }
 
   void _signOut() async {
