@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
