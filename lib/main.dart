@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
@@ -38,19 +39,22 @@ enum AuthStatus { NOT_LOGIN, NOT_DETERMINED, LOGIN }
 class _MyAppHomeState extends State<MyAppHome> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = '', _userEmail = '';
+  User _user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
-    widget.auth.getCurrentUser().then((user) {
-      setState(() {
-        if (user != null) {
-          _userId = user?.uid;
-          _userEmail = user?.email;
+    setState(() {
+      if (_user != null) {
+        if (!_user.emailVerified) {
+          authStatus = AuthStatus.NOT_LOGIN;
         }
-        authStatus =
-            user?.uid == null ? AuthStatus.NOT_LOGIN : AuthStatus.LOGIN;
-      });
+        _userId = _user?.uid;
+        _userEmail = _user?.email;
+        authStatus = AuthStatus.LOGIN;
+      } else {
+        authStatus = AuthStatus.NOT_LOGIN;
+      }
     });
   }
 
