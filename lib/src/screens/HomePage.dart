@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
   final VoidCallback onSignOut;
   final String userId, userEmail;
 
-  HomePage({Key key, this.auth, this.onSignOut, this.userEmail, this.userId})
+  HomePage({Key key, this.userId, this.userEmail, this.auth, this.onSignOut})
       : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           Center(
             child: Text('Hello' + widget.userEmail),
-          )
+          ),
         ],
       ),
     );
