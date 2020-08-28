@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
 
-enum STATE { SIGNIN, SIGNUP }
+enum STATE { SIGNIN, SIGNUP, RESET }
 
 class SignInSignUpPage extends StatefulWidget {
   final AuthFunc auth;
@@ -29,6 +29,21 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     super.initState();
     _errorMessage = '';
     _isLoading = false;
+  }
+
+  void _showResetPasswordSent(String email) async {
+    SnackBar snackBar = SnackBar(
+      content: Text('Email not exist or something went wrong '),
+      backgroundColor: Colors.red,
+    );
+    SnackBar snackBar2 = SnackBar(
+      content: Text('Reset link sent to ' + email),
+      backgroundColor: Colors.green,
+    );
+    await widget.auth
+        .sendPasswordResetLink(email)
+        .then((value) => {_scaffoldKey.currentState.showSnackBar(snackBar2)})
+        .catchError((e) => {_scaffoldKey.currentState.showSnackBar(snackBar)});
   }
 
   bool _validateAndSave() {
@@ -62,11 +77,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             );
             _scaffoldKey.currentState.showSnackBar(snackBar);
           }
-        } else {
+        } else if (_formState == STATE.SIGNUP) {
           userId = await widget.auth.signUp(
               emailController.text.trim(), passwordController.text.trim());
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
+        } else {
+          //reset goes here
+
         }
         setState(() {
           _isLoading = false;
@@ -135,6 +153,14 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     });
   }
 
+  void _changeFormToReset() {
+    _formKey.currentState.reset();
+    _errorMessage = '';
+    setState(() {
+      _formState = STATE.RESET;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
@@ -172,15 +198,63 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         key: _formKey,
         child: ListView(
           shrinkWrap: true,
-          children: <Widget>[
-            _showText(),
-            _showEmailInput(),
-            _showPasswordInput(),
-            _showButton(),
-            _showAsQuestion(),
-            _showErrorMessage(),
-          ],
+          children: _formState == STATE.RESET
+              ? <Widget>[
+                  _showEmailInput(),
+                  _showResetButton(),
+                  _showGotoSigninPage(),
+                ]
+              : <Widget>[
+                  _showText(),
+                  _showEmailInput(),
+                  _showPasswordInput(),
+                  _showButton(),
+                  _showAsQuestion(),
+                  _showErrorMessage(),
+                ],
         ),
+      ),
+    );
+  }
+
+  Widget _showResetButton() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 45, 0, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: 50.0,
+            width: 350.0,
+            child: Material(
+              borderRadius: BorderRadius.circular(5.0),
+              elevation: 2.0,
+              color: kPrimaryColor,
+              child: InkWell(
+                  onTap: () => _showResetPasswordSent(emailController.text),
+                  child: Center(
+                    child: Text(
+                      'Send Link',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _showGotoSigninPage() {
+    return FlatButton(
+      splashColor: Colors.transparent,
+      onPressed: _changeFormToSignIn,
+      child: Text(
+        'Login instead ?',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
       ),
     );
   }
@@ -205,6 +279,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget _showAsQuestion() {
     return FlatButton(
+        splashColor: Colors.transparent,
         onPressed: _formState == STATE.SIGNIN
             ? _changeFormToSignUp
             : _changeFormToSignIn,
@@ -310,9 +385,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                           : null,
                 ),
               )
-            : Container(
-                height: 0,
-                width: 0,
+            : Padding(
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                child: GestureDetector(
+                  onTap: _changeFormToReset,
+                  child: Text('Forgot password ?'),
+                ),
               ),
       ],
     );
