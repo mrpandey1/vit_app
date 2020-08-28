@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
+import 'package:vit_app/src/screens/HomePage.dart';
 
 enum STATE { SIGNIN, SIGNUP, RESET }
 
 class SignInSignUpPage extends StatefulWidget {
   final AuthFunc auth;
-  final VoidCallback onSignIn;
-  SignInSignUpPage({this.auth, this.onSignIn});
+
+  SignInSignUpPage({this.auth});
   @override
   _SignInSignUpPageState createState() => _SignInSignUpPageState();
 }
@@ -83,6 +84,10 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               backgroundColor: Colors.red,
             );
             _scaffoldKey.currentState.showSnackBar(snackBar);
+          } else {
+            // ----------- EMAIL IS VERIFIED -----------
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           }
         } else if (_formState == STATE.SIGNUP) {
           userId = await widget.auth.signUp(
@@ -92,15 +97,11 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           _clearControllers();
         } else {
           //reset goes here
-
         }
+
         setState(() {
           _isLoading = false;
         });
-        if (userId != null) {
-          if (userId.length > 0 && userId != null && _formState == STATE.SIGNIN)
-            widget.onSignIn();
-        }
       } catch (e) {
         print(e);
         setState(() {
@@ -190,16 +191,18 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   }
 
   Widget showCircularProgress() {
-    if (_isLoading)
+    if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(
           backgroundColor: kPrimaryColor,
         ),
       );
-    return Container(
-      height: 0,
-      width: 0,
-    );
+    } else {
+      return Container(
+        height: 0,
+        width: 0,
+      );
+    }
   }
 
   Widget showBody() {
@@ -213,7 +216,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
               ? <Widget>[
                   _showEmailInput(),
                   _showResetButton(),
-                  _showGotoSigninPage(),
+                  _showGotoSignInPage(),
                 ]
               : <Widget>[
                   _showText(),
@@ -259,7 +262,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     );
   }
 
-  Widget _showGotoSigninPage() {
+  Widget _showGotoSignInPage() {
     return FlatButton(
       splashColor: Colors.transparent,
       onPressed: _changeFormToSignIn,
@@ -419,8 +422,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           hintText: 'Enter VIT Email Id',
           icon: Icon(Icons.mail, color: Colors.grey),
         ),
-        validator: (value) =>
-            !value.endsWith('@vit.edu.in') ? 'Email is badly formatted' : null,
+        validator: (value) => !value.trim().endsWith('@vit.edu.in')
+            ? 'Email is badly formatted'
+            : null,
       ),
     );
   }

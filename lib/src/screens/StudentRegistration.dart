@@ -32,186 +32,189 @@ class _StudentRegistrationState extends State<StudentRegistration> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('VIT App'),
-          automaticallyImplyLeading: false,
-        ),
-        body: ListView(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      'Register',
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Form(
+        key: _formKey,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Text('VIT App'),
+            automaticallyImplyLeading: false,
+          ),
+          body: ListView(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: DropdownButtonFormField(
-                        hint: Text('Select Admission Year'),
-                        isExpanded: true,
-                        onChanged: (value) {
-                          setState(() {
-                            admissionYearValue = value;
-                          });
-                        },
-                        validator: (value) =>
-                            value == null ? 'This field is required' : null,
-                        value: admissionYearValue,
-                        items: admissionYear.map((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              '$value',
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: DropdownButtonFormField(
-                        hint: Text('Select Your Department'),
-                        isExpanded: true,
-                        onChanged: (value) {
-                          setState(() {
-                            departmentValue = value;
-                          });
-                        },
-                        validator: (value) =>
-                            value == null ? 'This field is required' : null,
-                        value: departmentValue,
-                        items: departments.map((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              '$value',
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: DropdownButtonFormField(
-                        hint: Text('Select Your Division'),
-                        isExpanded: true,
-                        onChanged: (value) {
-                          setState(() {
-                            divisionValue = value;
-                          });
-                        },
-                        validator: (value) =>
-                            value == null ? 'This field is required' : null,
-                        value: divisionValue,
-                        items: divisions.map((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Text(
-                              '$value',
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: TextFormField(
-                        onChanged: setRollNumber,
-                        maxLines: 1,
-                        keyboardType: TextInputType.number,
-                        autofocus: false,
-                        controller: rollNumberController,
-                        decoration: InputDecoration(
-                          hintText: 'Enter Your Roll Number ex: 0078',
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: DropdownButtonFormField(
+                          hint: Text('Select Admission Year'),
+                          isExpanded: true,
+                          onChanged: (value) {
+                            setState(() {
+                              admissionYearValue = value;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'This field is required' : null,
+                          value: admissionYearValue,
+                          items: admissionYear.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                '$value',
+                              ),
+                            );
+                          }).toList(),
                         ),
-                        validator: (value) =>
-                            value.length != 4 ? 'Invalid roll number' : null,
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: DropdownButtonFormField(
+                          hint: Text('Select Your Department'),
+                          isExpanded: true,
+                          onChanged: (value) {
+                            setState(() {
+                              departmentValue = value;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'This field is required' : null,
+                          value: departmentValue,
+                          items: departments.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                '$value',
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: DropdownButtonFormField(
+                          hint: Text('Select Your Division'),
+                          isExpanded: true,
+                          onChanged: (value) {
+                            setState(() {
+                              divisionValue = value;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'This field is required' : null,
+                          value: divisionValue,
+                          items: divisions.map((value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                '$value',
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: TextFormField(
+                          onChanged: setRollNumber,
+                          maxLines: 1,
+                          keyboardType: TextInputType.number,
+                          autofocus: false,
+                          controller: rollNumberController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter Your Roll Number ex: 0078',
+                          ),
+                          validator: (value) =>
+                              value.length != 4 ? 'Invalid roll number' : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Container(
+                    child: Text(
+                      'Your Roll Number',
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                Container(
-                  child: Text(
-                    'Your Roll Number',
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    child: Text(
+                      '${admissionYearValue != null ? admissionYearValue : ''} ${deptMap[departmentValue] != null ? deptMap[departmentValue] : ''} ${divisionValue != null ? divisionValue : ''} $roll',
+                      style: TextStyle(
+                          fontSize: 25.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  child: Text(
-                    '${admissionYearValue != null ? admissionYearValue : ''} ${deptMap[departmentValue] != null ? deptMap[departmentValue] : ''} ${divisionValue != null ? divisionValue : ''} $roll',
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                  SizedBox(
+                    height: 25.0,
                   ),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                Container(
-                  height: 40.0,
-                  width: 250.0,
-                  child: Material(
-                    borderRadius: BorderRadius.circular(5.0),
-                    elevation: 2.0,
-                    color: kPrimaryColor,
-                    child: InkWell(
-                      onTap: () => {
-                        if (_formKey.currentState.validate()) {registerUser()}
-                      },
-                      child: Center(
-                        child: Text(
-                          'Confirm ',
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.white,
+                  Container(
+                    height: 40.0,
+                    width: 250.0,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(5.0),
+                      elevation: 2.0,
+                      color: kPrimaryColor,
+                      child: InkWell(
+                        onTap: () => {
+                          if (_formKey.currentState.validate()) {registerUser()}
+                        },
+                        child: Center(
+                          child: Text(
+                            'Confirm ',
+                            style: TextStyle(
+                              fontSize: 17.0,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -248,8 +251,42 @@ class _StudentRegistrationState extends State<StudentRegistration> {
       });
       _scaffoldKey.currentState.showSnackBar(successSnackBar);
       Timer(Duration(seconds: 2), () {
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
       });
     }
+  }
+
+  Future<bool> _onBackPressed() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Student Registration Warning',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text('Please fill the details to register yourself'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Ok',
+                  style: TextStyle(
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

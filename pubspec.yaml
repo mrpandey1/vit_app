@@ -33,6 +33,8 @@ dependencies:
   firebase_core: ^0.5.0
   cloud_functions: ^0.6.0
   firebase_admin: ^0.1.3
+  flutter_spinkit: ^4.1.2+1
+
 
 dev_dependencies:
   flutter_test:
