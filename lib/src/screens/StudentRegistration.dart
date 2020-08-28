@@ -1,0 +1,255 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:vit_app/src/constants.dart';
+import 'package:vit_app/src/screens/HomePage.dart';
+
+class StudentRegistration extends StatefulWidget {
+  @override
+  _StudentRegistrationState createState() => _StudentRegistrationState();
+}
+
+class _StudentRegistrationState extends State<StudentRegistration> {
+  List admissionYear = [16, 17, 18, 19, 20];
+  List departments = ['INFT'];
+  List divisions = ['A', 'B'];
+
+  var deptMap = <String, int>{
+    'INFT': 101,
+  };
+
+  int admissionYearValue;
+  String departmentValue;
+  String divisionValue;
+  String roll = '';
+
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  TextEditingController rollNumberController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('VIT App'),
+          automaticallyImplyLeading: false,
+        ),
+        body: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: DropdownButtonFormField(
+                        hint: Text('Select Admission Year'),
+                        isExpanded: true,
+                        onChanged: (value) {
+                          setState(() {
+                            admissionYearValue = value;
+                          });
+                        },
+                        validator: (value) =>
+                            value == null ? 'This field is required' : null,
+                        value: admissionYearValue,
+                        items: admissionYear.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              '$value',
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: DropdownButtonFormField(
+                        hint: Text('Select Your Department'),
+                        isExpanded: true,
+                        onChanged: (value) {
+                          setState(() {
+                            departmentValue = value;
+                          });
+                        },
+                        validator: (value) =>
+                            value == null ? 'This field is required' : null,
+                        value: departmentValue,
+                        items: departments.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              '$value',
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: DropdownButtonFormField(
+                        hint: Text('Select Your Division'),
+                        isExpanded: true,
+                        onChanged: (value) {
+                          setState(() {
+                            divisionValue = value;
+                          });
+                        },
+                        validator: (value) =>
+                            value == null ? 'This field is required' : null,
+                        value: divisionValue,
+                        items: divisions.map((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Text(
+                              '$value',
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: TextFormField(
+                        onChanged: setRollNumber,
+                        maxLines: 1,
+                        keyboardType: TextInputType.number,
+                        autofocus: false,
+                        controller: rollNumberController,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Your Roll Number ex: 0078',
+                        ),
+                        validator: (value) =>
+                            value.length != 4 ? 'Invalid roll number' : null,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Container(
+                  child: Text(
+                    'Your Roll Number',
+                    style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Container(
+                  child: Text(
+                    '${admissionYearValue != null ? admissionYearValue : ''} ${deptMap[departmentValue] != null ? deptMap[departmentValue] : ''} ${divisionValue != null ? divisionValue : ''} $roll',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 25.0,
+                ),
+                Container(
+                  height: 40.0,
+                  width: 250.0,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(5.0),
+                    elevation: 2.0,
+                    color: kPrimaryColor,
+                    child: InkWell(
+                      onTap: () => {
+                        if (_formKey.currentState.validate()) {registerUser()}
+                      },
+                      child: Center(
+                        child: Text(
+                          'Confirm ',
+                          style: TextStyle(
+                            fontSize: 17.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 25.0,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void setRollNumber(value) {
+    setState(() {
+      roll = value;
+    });
+  }
+
+  Future<void> registerUser() async {
+    SnackBar failureSnackBar = SnackBar(
+      content: Text('Roll number is already registered!'),
+      backgroundColor: Colors.red,
+    );
+    SnackBar successSnackBar = SnackBar(
+      content: Text('Registration Completed Successfully'),
+      backgroundColor: Colors.green,
+    );
+
+    QuerySnapshot querySnapshot =
+        await userRef.where('rollNumber', isEqualTo: roll).get();
+
+    int foo = querySnapshot.docs.length;
+
+    if (foo > 0) {
+      _scaffoldKey.currentState.showSnackBar(failureSnackBar);
+    } else {
+      await userRef.doc(currentUser.id).update({
+        'isRegistered': true,
+        'rollNumber':
+            '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
+      });
+      _scaffoldKey.currentState.showSnackBar(successSnackBar);
+      Timer(Duration(seconds: 2), () {
+        Navigator.pop(context);
+      });
+    }
+  }
+}
