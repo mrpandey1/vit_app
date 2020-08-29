@@ -12,8 +12,8 @@ class BouncyPageRoute extends PageRouteBuilder {
                 Animation<double> animation,
                 Animation<double> secAnimation,
                 Widget child) {
-              animation =
-                  CurvedAnimation(curve: Curves.bounceInOut, parent: animation);
+              animation = CurvedAnimation(
+                  curve: Curves.fastLinearToSlowEaseIn, parent: animation);
               return ScaleTransition(
                 scale: animation,
                 child: child,

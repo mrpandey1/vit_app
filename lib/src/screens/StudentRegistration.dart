@@ -59,32 +59,24 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
+                  SizedBox(height: 20.0),
                   Column(
                     children: [
                       getDropDown(
                           hintText: 'Select Admission Year',
                           type: 'admissionYear',
                           valueMap: admissionYear),
-                      SizedBox(
-                        height: 20.0,
-                      ),
+                      SizedBox(height: 20.0),
                       getDropDown(
                           hintText: 'Select Your Department',
                           type: 'department',
                           valueMap: departments),
-                      SizedBox(
-                        height: 20.0,
-                      ),
+                      SizedBox(height: 20.0),
                       getDropDown(
                           hintText: 'Select Your Division',
                           type: 'division',
                           valueMap: divisions),
-                      SizedBox(
-                        height: 20.0,
-                      ),
+                      SizedBox(height: 20.0),
                       Container(
                         padding: EdgeInsets.only(left: 20.0, right: 20.0),
                         child: TextFormField(
@@ -104,9 +96,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
+                  SizedBox(height: 30.0),
                   Container(
                     child: Text(
                       'Your Roll Number',
@@ -127,9 +117,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                           fontSize: 25.0, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
+                  SizedBox(height: 25.0),
                   Container(
                     height: 40.0,
                     width: 250.0,
@@ -153,9 +141,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
+                  SizedBox(height: 25.0),
                 ],
               ),
             ],

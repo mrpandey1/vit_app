@@ -14,19 +14,27 @@ void _signOut(context) async {
   }
 }
 
-header(context,
-    {bool isAppTitle = false,
-    String titleText,
-    removeBack = false,
-    isLogout = false}) {
+header(
+  context, {
+  bool isAppTitle = false,
+  String titleText,
+  removeBack = false,
+  isCenterTitle = false,
+  isLogout = false,
+  bold = false,
+}) {
   return AppBar(
       title: Text(
         isAppTitle ? 'VIT' : titleText,
-        style: TextStyle(fontSize: isAppTitle ? 30 : 22, color: Colors.white),
+        style: TextStyle(
+            fontSize: isAppTitle ? 30 : 22,
+            color: Colors.white,
+            fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
 //      automaticallyImplyLeading: removeBack ? false : true,
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: !isAppTitle ? true : false,
       backgroundColor: kPrimaryColor,
+      centerTitle: isCenterTitle,
       actions: isLogout
           ? <Widget>[
               FlatButton(

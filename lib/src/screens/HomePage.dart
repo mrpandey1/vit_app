@@ -8,6 +8,7 @@ import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
+import 'package:vit_app/src/screens/AdminFeatures.dart';
 import 'package:vit_app/src/screens/StudentRegistration.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
@@ -62,6 +63,16 @@ class _HomePageState extends State<HomePage> {
           )
         : Scaffold(
             appBar: header(context, isAppTitle: true, isLogout: true),
+            floatingActionButton: currentUser.admin
+                ? FloatingActionButton(
+                    child: Icon(Icons.add),
+                    backgroundColor: kPrimaryColor,
+                    onPressed: () => {
+                      Navigator.push(
+                          context, BouncyPageRoute(widget: AdminFeatures()))
+                    },
+                  )
+                : null,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
