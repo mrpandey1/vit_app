@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
@@ -178,9 +179,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('VIT App'),
-      ),
+      appBar: header(context, isAppTitle: true, removeback: false),
       body: Stack(
         children: <Widget>[
           showBody(),

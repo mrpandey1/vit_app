@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/main.dart';
+import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
@@ -61,25 +62,26 @@ class _HomePageState extends State<HomePage> {
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Text('Home'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'Sign out',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: _signOut,
-                )
-              ],
-            ),
+            appBar: header(context, isAppTitle: true, isLogout: true),
+            // appBar: AppBar(
+            //   automaticallyImplyLeading: false,
+            //   title: Text('Home'),
+            //   actions: <Widget>[
+            //     FlatButton(
+            //       child: Text(
+            //         'Sign out',
+            //         style: TextStyle(color: Colors.white),
+            //       ),
+            //       onPressed: _signOut,
+            //     )
+            //   ],
+            // ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Center(
-                  child: Text('Hello ${currentUser.displayName}'),
+                  child: Text('Hello ${currentUser.admin}'),
                 ),
               ],
             ),
