@@ -36,10 +36,6 @@ class _HomePageState extends State<HomePage> {
       currentUser = VITUser.fromDocument(documentSnapshot);
       if (!currentUser.isRegistered) {
         Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => StudentRegistration()),
-        // );
       } else {
         setState(() {
           _loading = false;
@@ -87,7 +83,7 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 TimeLine(currentUser: currentUser),
                 NotesSection(),
-                ProfileSection()
+                ProfilePage()
               ],
               controller: pageController,
               onPageChanged: onPageChanged,
