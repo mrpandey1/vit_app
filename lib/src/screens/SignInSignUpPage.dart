@@ -96,8 +96,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           widget.auth.sendEmailVerification();
           _showVerifyEmailSentDialog();
           _clearControllers();
-        } else {
-          //reset goes here
         }
 
         setState(() {
