@@ -17,14 +17,14 @@ void _signOut(context) async {
 header(context,
     {bool isAppTitle = false,
     String titleText,
-    removeback = false,
+    removeBack = false,
     isLogout = false}) {
   return AppBar(
       title: Text(
         isAppTitle ? 'VIT' : titleText,
         style: TextStyle(fontSize: isAppTitle ? 30 : 22, color: Colors.white),
       ),
-      automaticallyImplyLeading: removeback ? false : true,
+      automaticallyImplyLeading: removeBack ? false : true,
       backgroundColor: kPrimaryColor,
       actions: isLogout
           ? <Widget>[
