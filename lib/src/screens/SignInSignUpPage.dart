@@ -367,10 +367,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
             controller: passwordController,
             decoration: InputDecoration(
               hintText: 'Enter Password',
-              icon: Icon(
-                Icons.lock,
-                color: Colors.grey,
-              ),
+              labelText: 'Password',
+              border: OutlineInputBorder(),
             ),
             validator: (value) => value.trim().length < 8
                 ? 'Password must be of more than 7 character'
@@ -386,11 +384,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   autofocus: false,
                   controller: confirmPasswordController,
                   decoration: InputDecoration(
-                    hintText: 'Confirm Password',
-                    icon: Icon(
-                      Icons.lock,
-                      color: Colors.grey,
-                    ),
+                    hintText: 'Enter Confirm Password',
+                    labelText: 'Confirm Password',
+                    border: OutlineInputBorder(),
                   ),
                   validator: (value) =>
                       passwordController.text.trim() != value.trim()
@@ -419,7 +415,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         controller: emailController,
         decoration: InputDecoration(
           hintText: 'Enter VIT Email Id',
-          icon: Icon(Icons.mail, color: Colors.grey),
+          labelText: 'Email Id',
+          border: OutlineInputBorder(),
         ),
         validator: (value) => !value.trim().endsWith('@vit.edu.in')
             ? 'Email is badly formatted'

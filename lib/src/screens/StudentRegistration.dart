@@ -152,6 +152,8 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                           controller: rollNumberController,
                           decoration: InputDecoration(
                             hintText: 'Enter Your Roll Number ex: 0078',
+                            labelText: 'Roll number',
+                            border: OutlineInputBorder(),
                           ),
                           validator: (value) =>
                               value.length != 4 ? 'Invalid roll number' : null,
