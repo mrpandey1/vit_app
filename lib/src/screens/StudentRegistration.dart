@@ -64,81 +64,24 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                   ),
                   Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: DropdownButtonFormField(
-                          hint: Text('Select Admission Year'),
-                          isExpanded: true,
-                          onChanged: (value) {
-                            setState(() {
-                              admissionYearValue = value;
-                            });
-                          },
-                          validator: (value) =>
-                              value == null ? 'This field is required' : null,
-                          value: admissionYearValue,
-                          items: admissionYear.map((value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(
-                                '$value',
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      getDropDown(
+                          hintText: 'Select Admission Year',
+                          type: 'admissionYear',
+                          valueMap: admissionYear),
                       SizedBox(
                         height: 20.0,
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: DropdownButtonFormField(
-                          hint: Text('Select Your Department'),
-                          isExpanded: true,
-                          onChanged: (value) {
-                            setState(() {
-                              departmentValue = value;
-                            });
-                          },
-                          validator: (value) =>
-                              value == null ? 'This field is required' : null,
-                          value: departmentValue,
-                          items: departments.map((value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(
-                                '$value',
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      getDropDown(
+                          hintText: 'Select Your Department',
+                          type: 'department',
+                          valueMap: departments),
                       SizedBox(
                         height: 20.0,
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: DropdownButtonFormField(
-                          hint: Text('Select Your Division'),
-                          isExpanded: true,
-                          onChanged: (value) {
-                            setState(() {
-                              divisionValue = value;
-                            });
-                          },
-                          validator: (value) =>
-                              value == null ? 'This field is required' : null,
-                          value: divisionValue,
-                          items: divisions.map((value) {
-                            return DropdownMenuItem(
-                              value: value,
-                              child: Text(
-                                '$value',
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                      getDropDown(
+                          hintText: 'Select Your Division',
+                          type: 'division',
+                          valueMap: divisions),
                       SizedBox(
                         height: 20.0,
                       ),
@@ -228,6 +171,50 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     });
   }
 
+  // ------------- DROPDOWN LIST WIDGET ---------------
+  Container getDropDown(
+      {@required hintText, @required type, @required List<dynamic> valueMap}) {
+    return Container(
+      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+      child: DropdownButtonFormField(
+        hint: Text('$hintText'),
+        isExpanded: true,
+        onChanged: (value) {
+          setState(() {
+            switch (type) {
+              case 'admissionYear':
+                {
+                  admissionYearValue = value;
+                  break;
+                }
+
+              case 'department':
+                {
+                  departmentValue = value;
+                  break;
+                }
+
+              case 'division':
+                {
+                  divisionValue = value;
+                  break;
+                }
+            }
+          });
+        },
+        validator: (value) => value == null ? 'This field is required' : null,
+        items: valueMap.map((value) {
+          return DropdownMenuItem(
+            value: value,
+            child: Text(
+              '$value',
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
   Future<void> registerUser() async {
     SnackBar failureSnackBar = SnackBar(
       content: Text('Roll number is already registered!'),
@@ -244,6 +231,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     int foo = querySnapshot.docs.length;
 
     if (foo > 0) {
+      // ----------- IF ROLL NUMBER IS ALREADY IN USE ------------
       _scaffoldKey.currentState.showSnackBar(failureSnackBar);
     } else {
       await userRef.doc(currentUser.id).update({

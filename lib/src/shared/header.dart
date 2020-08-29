@@ -24,7 +24,8 @@ header(context,
         isAppTitle ? 'VIT' : titleText,
         style: TextStyle(fontSize: isAppTitle ? 30 : 22, color: Colors.white),
       ),
-      automaticallyImplyLeading: removeBack ? false : true,
+//      automaticallyImplyLeading: removeBack ? false : true,
+      automaticallyImplyLeading: false,
       backgroundColor: kPrimaryColor,
       actions: isLogout
           ? <Widget>[

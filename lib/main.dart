@@ -65,7 +65,7 @@ class _MyAppHomeState extends State<MyAppHome> {
     return Scaffold(
       body: SpinKitFoldingCube(
         color: kPrimaryColor,
-        duration: Duration(seconds: 1),
+        duration: Duration(seconds: 2),
       ),
     );
   }
