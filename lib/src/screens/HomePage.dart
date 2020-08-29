@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/main.dart';
+import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/StudentRegistration.dart';
-
-import 'SignInSignUpPage.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
 VITUser currentUser;
@@ -31,10 +30,11 @@ class _HomePageState extends State<HomePage> {
         .then((DocumentSnapshot documentSnapshot) {
       currentUser = VITUser.fromDocument(documentSnapshot);
       if (!currentUser.isRegistered) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => StudentRegistration()),
-        );
+        Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => StudentRegistration()),
+        // );
       } else {
         setState(() {
           _loading = false;
@@ -46,8 +46,7 @@ class _HomePageState extends State<HomePage> {
   void _signOut() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => MyApp()));
+      Navigator.pushReplacement(context, BouncyPageRoute(widget: MyApp()));
     } catch (e) {
       print(e);
     }
