@@ -225,6 +225,7 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
       'from': widget.fromText,
       'mediaUrl': mediaUrl,
       'notice': widget.noticeText,
+      'timestamp': DateTime.now(),
     });
     setState(() {
       _loading = false;
