@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/SelectSendNoticeOptions.dart';
 import 'package:vit_app/src/Shared/header.dart';
+import 'package:image/image.dart' as im;
 
 class AddNotice extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class _AddNoticeState extends State<AddNotice> {
   bool fromError = false;
 
   File file;
+  String postId = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +210,22 @@ class _AddNoticeState extends State<AddNotice> {
     });
   }
 
-  void onSubmit() {
+  compressImage() async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    im.Image imageFile = im.decodeImage(file.readAsBytesSync());
+
+    final compressedImageFile = File('$path/img_$postId.jpg')
+      ..writeAsBytesSync(
+        im.encodeJpg(imageFile, quality: 80),
+      );
+
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  void onSubmit() async {
     if (_fromController.text.trim().isEmpty) {
       setState(() {
         fromError = true;
@@ -227,8 +246,12 @@ class _AddNoticeState extends State<AddNotice> {
 
     if (_fromController.text.trim().isNotEmpty &&
         _noticeController.text.trim().isNotEmpty) {
-      String notice = _fromController.text.trim();
-      String from = _noticeController.text.trim();
+      String notice = _noticeController.text.trim();
+      String from = _fromController.text.trim();
+
+      if (file != null) {
+        await compressImage();
+      }
 
       Navigator.push(
           context,

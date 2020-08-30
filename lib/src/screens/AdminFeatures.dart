@@ -15,7 +15,10 @@ class _AdminFeaturesState extends State<AdminFeatures> {
     return Scaffold(
       appBar: header(
         context,
-        isAppTitle: true,
+        isAppTitle: false,
+        titleText: 'Add',
+        isCenterTitle: true,
+        bold: true,
       ),
       body: ListView(
         children: [
