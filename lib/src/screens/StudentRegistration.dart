@@ -232,10 +232,11 @@ class _StudentRegistrationState extends State<StudentRegistration> {
           .collection('$yearValue')
           .doc(currentUser.id)
           .set({
+        ...documentSnapshot.data(),
         'isRegistered': true,
+        'division': divisionValue,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
-        ...documentSnapshot.data(),
       });
 
       await userRef.doc(currentUser.id).update({

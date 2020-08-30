@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/main.dart';
@@ -16,6 +17,9 @@ import 'package:vit_app/src/screens/Timeline.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
 final studentRef = FirebaseFirestore.instance.collection('students');
+final timelineRef = FirebaseFirestore.instance.collection('timeline');
+final StorageReference storageRef = FirebaseStorage.instance.ref();
+
 VITUser currentUser;
 
 class HomePage extends StatefulWidget {
