@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
+import 'package:vit_app/src/shared/header.dart';
 
 class StudentRegistration extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
   List admissionYear = [16, 17, 18, 19, 20];
   List departments = ['INFT'];
   List divisions = ['A', 'B'];
+  List years = ['First', 'Second', 'Third', 'Fourth'];
 
   var deptMap = <String, int>{
     'INFT': 101,
@@ -23,6 +25,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
   int admissionYearValue;
   String departmentValue;
   String divisionValue;
+  String yearValue;
   String roll = '';
 
   final _formKey = GlobalKey<FormState>();
@@ -38,27 +41,18 @@ class _StudentRegistrationState extends State<StudentRegistration> {
         key: _formKey,
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
-            title: Text('VIT App'),
-            automaticallyImplyLeading: false,
+          appBar: header(
+            context,
+            isAppTitle: false,
+            isCenterTitle: true,
+            titleText: 'Register',
+            bold: true,
           ),
           body: ListView(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        'Register',
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 20.0),
                   Column(
                     children: [
@@ -76,6 +70,11 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                           hintText: 'Select Your Division',
                           type: 'division',
                           valueMap: divisions),
+                      SizedBox(height: 20.0),
+                      getDropDown(
+                          hintText: 'Select Your Year',
+                          type: 'year',
+                          valueMap: years),
                       SizedBox(height: 20.0),
                       Container(
                         padding: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -96,7 +95,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   Container(
                     child: Text(
                       'Your Roll Number',
@@ -108,7 +107,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                     ),
                   ),
                   SizedBox(
-                    height: 20.0,
+                    height: 8.0,
                   ),
                   Container(
                     child: Text(
@@ -185,6 +184,11 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                   divisionValue = value;
                   break;
                 }
+
+              case 'year':
+                {
+                  yearValue = value;
+                }
             }
           });
         },
@@ -220,11 +224,25 @@ class _StudentRegistrationState extends State<StudentRegistration> {
       // ----------- IF ROLL NUMBER IS ALREADY IN USE ------------
       _scaffoldKey.currentState.showSnackBar(failureSnackBar);
     } else {
-      await userRef.doc(currentUser.id).update({
+      DocumentSnapshot documentSnapshot =
+          await userRef.doc(currentUser.id).get();
+
+      await studentRef
+          .doc(departmentValue)
+          .collection('$yearValue')
+          .doc(currentUser.id)
+          .set({
+        ...documentSnapshot.data(),
         'isRegistered': true,
+        'division': divisionValue,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
       });
+
+      await userRef.doc(currentUser.id).update({
+        'isRegistered': true,
+      });
+
       _scaffoldKey.currentState.showSnackBar(successSnackBar);
     }
   }
