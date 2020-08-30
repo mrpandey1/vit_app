@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/screens/AddNotes.dart';
 import 'package:vit_app/src/screens/AddNotice.dart';
-import 'package:vit_app/src/shared/header.dart';
+import 'package:vit_app/src/Shared/header.dart';
 
 class AdminFeatures extends StatefulWidget {
   @override

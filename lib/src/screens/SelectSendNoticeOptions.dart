@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:vit_app/src/shared/header.dart';
+import 'package:vit_app/src/Shared/header.dart';
 
 class SelectSendNoticeOptions extends StatefulWidget {
   final String noticeText;

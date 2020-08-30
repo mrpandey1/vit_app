@@ -90,9 +90,6 @@ class _HomePageState extends State<HomePage> {
                     },
                   )
                 : null,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
             body: PageView(
               children: <Widget>[
                 TimeLine(currentUser: currentUser),

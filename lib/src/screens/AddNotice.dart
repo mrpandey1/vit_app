@@ -1,10 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/SelectSendNoticeOptions.dart';
-import 'package:vit_app/src/shared/header.dart';
+import 'package:vit_app/src/Shared/header.dart';
 
 class AddNotice extends StatefulWidget {
   @override
