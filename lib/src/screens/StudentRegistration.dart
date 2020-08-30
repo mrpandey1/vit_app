@@ -249,6 +249,9 @@ class _StudentRegistrationState extends State<StudentRegistration> {
         'isRegistered': true,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
+        'dept': departmentValue,
+        'division': divisionValue,
+        'year': yearValue
       });
 
       _scaffoldKey.currentState.showSnackBar(successSnackBar);

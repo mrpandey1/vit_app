@@ -7,15 +7,20 @@ class VITUser {
   final bool admin;
   final bool isRegistered;
   final String rollNumber;
+  final String dept;
+  final String year;
+  final String division;
 
-  VITUser({
-    this.id,
-    this.displayName,
-    this.email,
-    this.admin,
-    this.isRegistered,
-    this.rollNumber,
-  });
+  VITUser(
+      {this.id,
+      this.displayName,
+      this.email,
+      this.admin,
+      this.isRegistered,
+      this.rollNumber,
+      this.dept,
+      this.division,
+      this.year});
 
   // Named Constructor
   factory VITUser.fromDocument(DocumentSnapshot doc) {
@@ -26,6 +31,9 @@ class VITUser {
       admin: doc.data()['admin'],
       isRegistered: doc.data()['isRegistered'],
       rollNumber: doc.data()['rollNumber'],
+      dept: doc.data()['dept'],
+      division: doc.data()['division'],
+      year: doc.data()['year'],
     );
   }
 }

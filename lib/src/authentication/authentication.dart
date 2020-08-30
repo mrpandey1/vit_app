@@ -50,7 +50,10 @@ class MyAuth implements AuthFunc {
       'timestamp': DateTime.now(),
       'displayName':
           '${user.email.split('@')[0].split('.')[0]} ${user.email.split('@')[0].split('.')[1]}',
-      'rollNumber': ''
+      'rollNumber': '',
+      'dept': '',
+      'division': '',
+      'year': ''
     });
 
     return user.uid;

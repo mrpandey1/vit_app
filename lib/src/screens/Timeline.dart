@@ -23,24 +23,20 @@ class _TimeLineState extends State<TimeLine> {
   }
 
   getPost() async {
-    dept = 'INFT';
-    division = 'B';
-    year = 'Third';
-    DocumentSnapshot snapshot =
-        await studentRef.doc(dept).collection(year).doc(currentUser.id).get();
-
+    DocumentSnapshot snapshot = await userRef.doc(currentUser.id).get();
+    snapshot.data().forEach((key, value) {
+      if (key == 'year') {
+        year = value;
+      } else if (key == 'division') {
+        division = value;
+      } else if (key == 'dept') {
+        dept = value;
+      }
+    });
     QuerySnapshot sn = await timeLineref
         .doc(dept + division + year)
         .collection('timelinePosts')
-        .
-        // ignore: deprecated_member_use
-        getDocuments();
-
-    DocumentSnapshot posts = await timeLineref
-        .doc(dept + division + year)
-        .collection('timelinePosts')
-        .doc()
-        .get();
+        .getDocuments();
     sn.docs.forEach((element) {
       print(element.data());
     });
