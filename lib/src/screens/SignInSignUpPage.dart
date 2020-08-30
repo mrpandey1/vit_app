@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
@@ -177,7 +178,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       key: _scaffoldKey,
-      appBar: header(context, isAppTitle: true, removeback: false),
+      appBar: header(context, isAppTitle: true, removeBack: false),
       body: Stack(
         children: <Widget>[
           showBody(),
@@ -189,9 +190,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget showCircularProgress() {
     if (_isLoading) {
-      return Center(
-        child: CircularProgressIndicator(
-          backgroundColor: kPrimaryColor,
+      return Container(
+        child: Center(
+          child: SpinKitFoldingCube(
+            color: kPrimaryColor,
+            duration: Duration(seconds: 2),
+          ),
         ),
       );
     } else {
@@ -204,6 +208,10 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget showBody() {
     return Container(
+      height: MediaQuery.of(context).size.height,
+      color: _isLoading
+          ? Colors.black12.withOpacity(0.1)
+          : Colors.black12.withOpacity(0),
       padding: EdgeInsets.only(left: 16.0, right: 16.0),
       child: Form(
         key: _formKey,

@@ -5,5 +5,6 @@ import '../constants.dart';
 loadingScreen() {
   return SpinKitFoldingCube(
     color: kPrimaryColor,
+    duration: Duration(seconds: 2),
   );
 }
