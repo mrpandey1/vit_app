@@ -30,94 +30,84 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  getName() {}
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: userRef.doc(currentUser.id).get(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return loadingScreen();
-        }
-        return Scaffold(
-          body: ListView(
-            children: <Widget>[
-              //profile pic start
-              Container(
-                height: 200.0,
-                child: new Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: new Stack(fit: StackFit.loose, children: <Widget>[
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new Container(
-                              width: 140.0,
-                              height: 140.0,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://cdn2.iconfinder.com/data/icons/men-avatars/33/man_19-512.png',
-                                placeholder: (context, url) => Container(
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+    return Scaffold(
+      body: ListView(
+        children: <Widget>[
+          //profile pic start
+          Container(
+            height: 200.0,
+            child: new Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: new Stack(fit: StackFit.loose, children: <Widget>[
+                    new Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          width: 140.0,
+                          height: 140.0,
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                'https://cdn2.iconfinder.com/data/icons/men-avatars/33/man_19-512.png',
+                            placeholder: (context, url) => Container(
+                              child: Center(
+                                child: CircularProgressIndicator(),
                               ),
                             ),
-                          ],
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                         ),
-                      ]),
-                    )
-                  ],
-                ),
-              ),
-              //profile pic ending
-              SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, right: 30),
-                      child: Text(currentUser.displayName),
+                      ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, right: 30),
-                      child: Text(currentUser.email),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, right: 30),
-                      child: Text(currentUser.rollNumber),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    FlatButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          BouncyPageRoute(
-                              widget: EditProfile(
-                            currentUser: currentUser,
-                          ))),
-                      child: Text('Change profile'),
-                    )
-                  ],
-                ),
-              )
-            ],
+                  ]),
+                )
+              ],
+            ),
           ),
-        );
-      },
+          //profile pic ending
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 30),
+                  child: Text(currentUser.displayName),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 30),
+                  child: Text(currentUser.email),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, right: 30),
+                  child: Text(currentUser.rollNumber),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                FlatButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      BouncyPageRoute(
+                          widget: EditProfile(
+                        currentUser: currentUser,
+                      ))),
+                  child: Text('Change profile'),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

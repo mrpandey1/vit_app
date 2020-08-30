@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -211,26 +209,23 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     // ------------ ADD CONDITION FOR "ALL" ----------------
     // add here
 
-    QuerySnapshot querySnapshot = await studentRef
-        .doc(departmentValue)
-        .collection(yearValue)
-        .where('division', isEqualTo: divisionValue)
-        .get();
+    // QuerySnapshot querySnapshot = await studentRef
+    //     .doc(departmentValue)
+    //     .collection(yearValue)
+    //     .where('division', isEqualTo: divisionValue)
+    //     .get();
 
-    querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) async {
-      await timelineRef
-          .doc(documentSnapshot.id)
-          .collection('timelinePosts')
-          .doc(postId)
-          .set({
-        'postId': postId,
-        'ownerId': currentUser.id,
-        'from': widget.fromText,
-        'mediaUrl': mediaUrl,
-        'notice': widget.noticeText,
-      });
+    await timelineRef
+        .doc(departmentValue + divisionValue + yearValue)
+        .collection('timelinePosts')
+        .doc(postId)
+        .set({
+      'postId': postId,
+      'ownerId': currentUser.id,
+      'from': widget.fromText,
+      'mediaUrl': mediaUrl,
+      'notice': widget.noticeText,
     });
-
     setState(() {
       _loading = false;
     });

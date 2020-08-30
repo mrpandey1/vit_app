@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
-import 'package:vit_app/src/shared/header.dart';
+import 'package:vit_app/src/Shared/header.dart';
 
 class StudentRegistration extends StatefulWidget {
   @override
@@ -235,15 +235,24 @@ class _StudentRegistrationState extends State<StudentRegistration> {
         ...documentSnapshot.data(),
         'isRegistered': true,
         'division': divisionValue,
+        'year': yearValue,
+      });
+      await studentRef
+          .doc(departmentValue)
+          .collection('$yearValue')
+          .doc(currentUser.id)
+          .update(({
+            'rollNumber':
+                '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
+          }));
+      await userRef.doc(currentUser.id).update({
+        'isRegistered': true,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
       });
 
-      await userRef.doc(currentUser.id).update({
-        'isRegistered': true,
-      });
-
       _scaffoldKey.currentState.showSnackBar(successSnackBar);
+      Navigator.pop(context);
     }
   }
 
