@@ -15,6 +15,7 @@ import 'package:vit_app/src/screens/StudentRegistration.dart';
 import 'package:vit_app/src/screens/Timeline.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
+final studentRef = FirebaseFirestore.instance.collection('students');
 VITUser currentUser;
 
 class HomePage extends StatefulWidget {
