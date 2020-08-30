@@ -19,15 +19,6 @@ class _TimeLineState extends State<TimeLine> {
       body: Center(
         child: Text('${currentUser.admin}'),
       ),
-      floatingActionButton: currentUser.admin
-          ? FloatingActionButton(
-              onPressed: () {
-                // Add your onPressed code here!
-              },
-              child: Icon(Icons.add),
-              backgroundColor: Colors.green,
-            )
-          : null,
     );
   }
 }

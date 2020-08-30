@@ -226,12 +226,6 @@ class _StudentRegistrationState extends State<StudentRegistration> {
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
       });
       _scaffoldKey.currentState.showSnackBar(successSnackBar);
-      Timer(Duration(seconds: 2), () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      });
     }
   }
 
