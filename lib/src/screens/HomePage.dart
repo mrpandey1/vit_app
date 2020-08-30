@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/main.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
