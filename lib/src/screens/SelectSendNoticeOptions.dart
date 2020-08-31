@@ -226,6 +226,20 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
       'mediaUrl': mediaUrl,
       'notice': widget.noticeText,
       'timestamp': DateTime.now(),
+      'to': departmentValue + divisionValue + yearValue
+    });
+    await postRef
+        .doc(currentUser.id)
+        .collection(departmentValue)
+        .doc(postId)
+        .set({
+      'postId': postId,
+      'ownerId': currentUser.id,
+      'from': widget.fromText,
+      'mediaUrl': mediaUrl,
+      'notice': widget.noticeText,
+      'timestamp': DateTime.now(),
+      'to': departmentValue + divisionValue + yearValue
     });
     setState(() {
       _loading = false;

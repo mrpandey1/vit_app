@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
-import 'package:vit_app/src/shared/loading.dart';
 import 'package:vit_app/src/widgets/TimelinePost.dart';
 
 class TimeLine extends StatefulWidget {

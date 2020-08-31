@@ -18,6 +18,7 @@ import 'package:vit_app/src/screens/Timeline.dart';
 final userRef = FirebaseFirestore.instance.collection('users');
 final studentRef = FirebaseFirestore.instance.collection('students');
 final timelineRef = FirebaseFirestore.instance.collection('timeline');
+final postRef = FirebaseFirestore.instance.collection('posts');
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 
 VITUser currentUser;
