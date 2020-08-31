@@ -91,7 +91,11 @@ class _StudentRegistrationState extends State<StudentRegistration> {
                             border: OutlineInputBorder(),
                           ),
                           validator: (value) =>
-                              value.length != 4 ? 'Invalid roll number' : null,
+                              !RegExp(r'^[0-9]+$').hasMatch(value)
+                                  ? 'Invalid roll number'
+                                  : value.length != 4
+                                      ? 'Invalid roll number'
+                                      : null,
                         ),
                       ),
                     ],
