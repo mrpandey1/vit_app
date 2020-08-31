@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/main.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
