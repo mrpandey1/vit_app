@@ -23,6 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    getProfile();
     getDocs();
   }
 
@@ -31,6 +32,19 @@ class _ProfilePageState extends State<ProfilePage> {
     return currentUser.admin
         ? buildAdminProfileScreen(context)
         : buildProfileScreen(context);
+  }
+
+  getProfile() async {
+    DocumentSnapshot snapshot = await userRef.doc(currentUser.id).get();
+    snapshot.data().forEach((key, value) {
+      if (key == 'displayName') {
+        name = value;
+      } else if (key == 'rollNumber') {
+        rollNumber = value;
+      } else if (key == 'email') {
+        email = value;
+      }
+    });
   }
 
   Future getDocs() async {
@@ -160,21 +174,21 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.displayName),
+                  child: Text(name ?? ''),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.email),
+                  child: Text(email ?? ''),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.rollNumber),
+                  child: Text(rollNumber ?? ''),
                 ),
                 SizedBox(
                   height: 20,

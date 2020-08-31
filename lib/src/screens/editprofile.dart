@@ -29,7 +29,7 @@ class _EditProfileState extends State<EditProfile> {
   List admissionYear = [16, 17, 18, 19, 20];
   List departments = ['INFT'];
   List divisions = ['A', 'B'];
-
+  List years = ['First', 'Second', 'Third', 'Fourth'];
   var deptMap = <String, int>{
     'INFT': 101,
   };
@@ -40,10 +40,12 @@ class _EditProfileState extends State<EditProfile> {
   int admissionYearValue = int.parse(currentUser.rollNumber.substring(0, 2));
   String divisionValue = currentUser.rollNumber.substring(5, 6);
   String roll = currentUser.rollNumber.substring(6);
+  String departmentValue;
+  String year = currentUser.year;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Widget build(BuildContext context) {
-    String departmentValue =
+    departmentValue =
         deptMapRev[int.parse(currentUser.rollNumber.substring(2, 5))];
     return Scaffold(
       appBar: header(context, titleText: currentUser.displayName),
@@ -140,8 +142,6 @@ class _EditProfileState extends State<EditProfile> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: DropdownButtonFormField(
-                  // hint: Text(
-                  //     '${deptMapRev[int.parse(currentUser.rollNumber.substring(2, 5))]}'),
                   isExpanded: true,
                   onChanged: (value) {
                     setState(() {
@@ -201,7 +201,6 @@ class _EditProfileState extends State<EditProfile> {
               SizedBox(
                 height: 20,
               ),
-              //confirm button
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: FlatButton(
@@ -259,6 +258,9 @@ class _EditProfileState extends State<EditProfile> {
     await userRef
         .doc(currentUser.id)
         .update({
+          'displayName': nameController.text,
+          'division': divisionValue,
+          'dept': departmentValue,
           'rollNumber':
               '$admissionYearValue${deptMap['INFT']}$divisionValue$roll',
         })
@@ -266,6 +268,16 @@ class _EditProfileState extends State<EditProfile> {
             (value) => _scaffoldKey.currentState.showSnackBar(successSnackBar))
         .catchError(
             (e) => {_scaffoldKey.currentState.showSnackBar(failureSnackBar)});
+    await studentRef
+        .doc(departmentValue)
+        .collection(year)
+        .doc(currentUser.id)
+        .update({
+      'displayName': nameController.text,
+      'division': divisionValue,
+      'dept': departmentValue,
+      'rollNumber': '$admissionYearValue${deptMap['INFT']}$divisionValue$roll',
+    });
     Timer(Duration(seconds: 2), () {
       Navigator.pop(context);
     });

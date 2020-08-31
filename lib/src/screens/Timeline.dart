@@ -25,7 +25,7 @@ class _TimeLineState extends State<TimeLine> {
       stream: timelineRef
           .doc(currentUser.dept + currentUser.division + currentUser.year)
           .collection('timelinePosts')
-          .orderBy('timestamp', descending: true)
+          .orderBy('timestamp', descending: false)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
         if (!snapshots.hasData) {
