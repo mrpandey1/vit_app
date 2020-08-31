@@ -17,20 +17,40 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String email, name, rollNumber;
+  String email = '', name = '', rollNumber = '';
   bool admin;
   List<TimelinePost> timelinePosts = [];
   @override
   void initState() {
     super.initState();
+    getProfile();
     getDocs();
   }
 
   @override
   Widget build(BuildContext context) {
-    return currentUser.admin
-        ? buildAdminProfileScreen(context)
-        : buildProfileScreen(context);
+    return !currentUser.admin
+        ? buildProfileScreen(context)
+        : buildAdminProfileScreen(context);
+  }
+
+  getProfile() async {
+    DocumentSnapshot snapshot = await userRef.doc(currentUser.id).get();
+    snapshot.data().forEach((key, value) {
+      if (key == 'displayName') {
+        setState(() {
+          name = value;
+        });
+      } else if (key == 'rollNumber') {
+        setState(() {
+          rollNumber = value;
+        });
+      } else if (key == 'email') {
+        setState(() {
+          email = value;
+        });
+      }
+    });
   }
 
   Future getDocs() async {
@@ -43,21 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
         });
-      });
-    });
-  }
-
-  getPosts() {
-    timelineRef
-        .doc(currentUser.dept + currentUser.division + currentUser.year)
-        .collection('timelinePosts')
-        .orderBy('timestamp', descending: true)
-        .get()
-        .then((value) {
-      value.docs.forEach((DocumentSnapshot documentSnapshot) {
-        setState(() {
-          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
-        });
+        print(timelinePosts);
       });
     });
   }
@@ -160,34 +166,34 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.displayName),
+                  child: Text(name),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.email),
+                  child: Text(email ?? ''),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(currentUser.rollNumber),
+                  child: Text(rollNumber ?? ''),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                FlatButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      BouncyPageRoute(
-                          widget: EditProfile(
-                        currentUser: currentUser,
-                      ))),
-                  child: Text('Change profile'),
-                )
+                // FlatButton(
+                //   onPressed: () => Navigator.push(
+                //       context,
+                //       BouncyPageRoute(
+                //           widget: EditProfile(
+                //         currentUser: currentUser,
+                //       ))),
+                //   child: Text('Change profile'),
+                // )
               ],
             ),
           )
