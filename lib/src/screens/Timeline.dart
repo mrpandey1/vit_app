@@ -33,8 +33,8 @@ class _TimeLineState extends State<TimeLine> {
           return loadingScreen();
         }
         List<TimelinePost> timelinePosts = [];
-        snapshots.data.docChanges.forEach((documentSnapshot) {
-          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot.doc));
+        snapshots.data.docs.forEach((documentSnapshot) {
+          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
         });
 
         return timelinePosts.isEmpty
