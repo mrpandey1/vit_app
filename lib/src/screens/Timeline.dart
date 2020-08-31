@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/Shared/loading.dart';
+import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/TimelinePost.dart';
 
@@ -32,12 +33,17 @@ class _TimeLineState extends State<TimeLine> {
           return loadingScreen();
         }
         List<TimelinePost> timelinePosts = [];
-        snapshots.data.docs.forEach((DocumentSnapshot documentSnapshot) {
-          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
+        snapshots.data.docChanges.forEach((documentSnapshot) {
+          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot.doc));
         });
 
         return timelinePosts.isEmpty
-            ? Text('No Notice For Now!')
+            ? Center(
+                child: Text(
+                  'No Notice For Now!',
+                  style: TextStyle(color: kPrimaryColor, fontSize: 16.0),
+                ),
+              )
             : ListView(
                 children: timelinePosts,
               );
