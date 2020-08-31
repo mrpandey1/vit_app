@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/Shared/header.dart';
@@ -76,7 +77,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
         if (_formState == STATE.SIGNIN) {
           userId = await widget.auth.signIn(
               emailController.text.trim(), passwordController.text.trim());
-          _clearControllers();
           if (userId == null) {
             setState(() {
               _isLoading = false;
@@ -95,6 +95,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           userId = await widget.auth.signUp(
               emailController.text.trim(), passwordController.text.trim());
           widget.auth.sendEmailVerification();
+          FirebaseAuth.instance.signOut();
           _showVerifyEmailSentDialog();
           _clearControllers();
         }

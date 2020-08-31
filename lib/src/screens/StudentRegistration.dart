@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vit_app/main.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/Shared/header.dart';
@@ -235,6 +236,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
         ...documentSnapshot.data(),
         'isRegistered': true,
         'division': divisionValue,
+        'dept': departmentValue,
         'year': yearValue,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
@@ -250,7 +252,11 @@ class _StudentRegistrationState extends State<StudentRegistration> {
       });
 
       _scaffoldKey.currentState.showSnackBar(successSnackBar);
-      Navigator.pop(context);
+
+      Timer(Duration(seconds: 2), () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyApp()));
+      });
     }
   }
 
