@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
-import 'package:vit_app/src/screens/editprofile.dart';
 import 'package:vit_app/src/widgets/TimelinePost.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -29,9 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return !currentUser.admin
-        ? buildProfileScreen(context)
-        : buildAdminProfileScreen(context);
+    return buildProfileScreen(context);
+    // : buildAdminProfileScreen(context);
   }
 
   getProfile() async {
@@ -63,7 +60,6 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
         });
-        print(timelinePosts);
       });
     });
   }

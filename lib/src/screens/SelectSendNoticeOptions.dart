@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vit_app/src/Shared/header.dart';
-
+import 'package:vit_app/src/Shared/snackbar.dart';
 import '../constants.dart';
 import 'HomePage.dart';
 
@@ -30,14 +30,11 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     'B',
   ];
   List years = ['All', 'First', 'Second', 'Third', 'Fourth'];
-
   String departmentValue;
   String divisionValue;
   String yearValue;
-
   bool _loading = false;
   String postId = Uuid().v4();
-
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -135,7 +132,6 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     }
   }
 
-  // ------------- DROPDOWN LIST WIDGET ---------------
   Container getDropDown(
       {@required hintText, @required type, @required List<dynamic> valueMap}) {
     return Container(
@@ -190,31 +186,10 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     setState(() {
       _loading = true;
     });
-
-    SnackBar failureSnackBar = SnackBar(
-      content: Text('Notice Sent Failure!'),
-      backgroundColor: Colors.red,
-    );
-    SnackBar successSnackBar = SnackBar(
-      content: Text('Notice Sent Successfully'),
-      backgroundColor: Colors.green,
-    );
-
     String mediaUrl = '';
-
     if (widget.file != null) {
       mediaUrl = await uploadImage(widget.file);
     }
-
-    // ------------ ADD CONDITION FOR "ALL" ----------------
-    // add here
-
-    // QuerySnapshot querySnapshot = await studentRef
-    //     .doc(departmentValue)
-    //     .collection(yearValue)
-    //     .where('division', isEqualTo: divisionValue)
-    //     .get();
-
     await timelineRef
         .doc(departmentValue + divisionValue + yearValue)
         .collection('timelinePosts')
@@ -227,23 +202,25 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
       'notice': widget.noticeText,
       'timestamp': DateTime.now(),
       'to': departmentValue + divisionValue + yearValue
-    });
-    await postRef
-        .doc(currentUser.id)
-        .collection(departmentValue)
-        .doc(postId)
-        .set({
-      'postId': postId,
-      'ownerId': currentUser.id,
-      'from': widget.fromText,
-      'mediaUrl': mediaUrl,
-      'notice': widget.noticeText,
-      'timestamp': DateTime.now(),
-      'to': departmentValue + divisionValue + yearValue
+    }).then((value) {
+      postRef.doc(currentUser.id).collection(departmentValue).doc(postId).set({
+        'postId': postId,
+        'ownerId': currentUser.id,
+        'from': widget.fromText,
+        'mediaUrl': mediaUrl,
+        'notice': widget.noticeText,
+        'timestamp': DateTime.now(),
+        'to': departmentValue + divisionValue + yearValue
+      }).then((value) {
+        _scaffoldKey.currentState.showSnackBar(snackBar(context,
+            isErrorSnackbar: false, successText: 'Notice sent Successfully'));
+      }).catchError((e) {
+        _scaffoldKey.currentState.showSnackBar(snackBar(context,
+            isErrorSnackbar: true, errorText: 'Something went wrong'));
+      });
     });
     setState(() {
       _loading = false;
     });
-    _scaffoldKey.currentState.showSnackBar(successSnackBar);
   }
 }

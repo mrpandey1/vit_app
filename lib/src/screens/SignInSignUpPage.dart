@@ -20,14 +20,14 @@ class SignInSignUpPage extends StatefulWidget {
 class _SignInSignUpPageState extends State<SignInSignUpPage> {
   final _formKey = new GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _errorMessage;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
   STATE _formState = STATE.SIGNIN;
-  bool _isIos, _isLoading;
+  bool _isLoading;
+  bool emailVerified = false;
 
   void _clearControllers() {
     emailController.clear();
@@ -38,24 +38,27 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
   @override
   void initState() {
     super.initState();
-    _errorMessage = '';
     _isLoading = false;
   }
 
   void _showResetPasswordSent(String email) async {
-    SnackBar snackBar = SnackBar(
-      content: Text('Email not exist or something went wrong '),
-      backgroundColor: Colors.red,
-    );
-    SnackBar snackBar2 = SnackBar(
-      content: Text('Reset link sent to ' + email),
-      backgroundColor: Colors.green,
-    );
-    await widget.auth.sendPasswordResetLink(email).then((value) {
-      _scaffoldKey.currentState.showSnackBar(snackBar2);
-      _clearControllers();
-      _changeFormToSignIn();
-    }).catchError((e) => {_scaffoldKey.currentState.showSnackBar(snackBar)});
+    try {
+      await widget.auth
+          .sendPasswordResetLink(email)
+          .then((value) => {
+                _scaffoldKey.currentState.showSnackBar(snackBar(context,
+                    isErrorSnackbar: true,
+                    successText: 'Email sent successfully'))
+              })
+          .catchError((e) => {
+                _scaffoldKey.currentState.showSnackBar(snackBar(context,
+                    isErrorSnackbar: true,
+                    errorText: 'Email not exist or something went wrong '))
+              });
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(
+          snackBar(context, isErrorSnackbar: true, errorText: e.toString()));
+    }
   }
 
   bool _validateAndSave() {
@@ -69,32 +72,26 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   void _validateAndSubmit() async {
     setState(() {
-      _errorMessage = '';
       _isLoading = true;
     });
     if (_validateAndSave()) {
       String userId = '';
       try {
         if (_formState == STATE.SIGNIN) {
-          userId = await widget.auth
-              .signIn(
-                  emailController.text.trim(), passwordController.text.trim())
-              .then((value) {
-            print('done');
-          }).catchError((e) => {
-                    _scaffoldKey.currentState.showSnackBar(snackBar(context,
-                        isErrorSnackbar: true, errorText: e.toString()))
-                  });
+          print(emailController.text + passwordController.text);
+          userId = await widget.auth.signIn(
+              emailController.text.trim(), passwordController.text.trim());
+          emailVerified = await widget.auth.isEmailVerified();
           if (userId == null) {
-            setState(() {
-              _isLoading = false;
-            });
             _scaffoldKey.currentState.showSnackBar(snackBar(context,
-                errorText: 'Email is not verified (check your inbox'));
+                isErrorSnackbar: true,
+                errorText: 'Please verify your email if you have registered'));
           } else {
-            // ----------- EMAIL IS VERIFIED -----------
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ));
           }
         } else if (_formState == STATE.SIGNUP) {
           userId = await widget.auth.signUp(
@@ -102,21 +99,12 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
           widget.auth.sendEmailVerification();
           FirebaseAuth.instance.signOut();
           _showVerifyEmailSentDialog();
-          _clearControllers();
         }
-
         setState(() {
           _isLoading = false;
         });
       } catch (e) {
-        print(e);
-        setState(() {
-          _isLoading = false;
-          if (_isIos)
-            _errorMessage = e.details;
-          else
-            _errorMessage = e.message;
-        });
+        _showErrorMessage('User Already exists');
       }
     } else {
       setState(() {
@@ -154,7 +142,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   void _changeFormToSignUp() {
     _formKey.currentState.reset();
-    _errorMessage = '';
     setState(() {
       _formState = STATE.SIGNUP;
     });
@@ -163,16 +150,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   void _changeFormToSignIn() {
     _formKey.currentState.reset();
-    _errorMessage = '';
     setState(() {
       _formState = STATE.SIGNIN;
     });
-    _clearControllers();
   }
 
   void _changeFormToReset() {
     _formKey.currentState.reset();
-    _errorMessage = '';
     setState(() {
       _formState = STATE.RESET;
     });
@@ -181,7 +165,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    _isIos = Theme.of(context).platform == TargetPlatform.iOS;
     return Scaffold(
       key: _scaffoldKey,
       appBar: header(context, isAppTitle: true, removeBack: false),
@@ -235,7 +218,6 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
                   _showPasswordInput(),
                   _showButton(),
                   _showAsQuestion(),
-                  _showErrorMessage(),
                 ],
         ),
       ),
@@ -284,22 +266,8 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     );
   }
 
-  Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage,
-        style: TextStyle(
-          color: Colors.red,
-          height: 1,
-          fontWeight: FontWeight.w300,
-        ),
-      );
-    } else {
-      return Container(
-        height: 0,
-        width: 0,
-      );
-    }
+  Widget _showErrorMessage(String error) {
+    return snackBar(context, isErrorSnackbar: true, errorText: error);
   }
 
   Widget _showAsQuestion() {
@@ -419,7 +387,7 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
 
   Widget _showEmailInput() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
       child: TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
