@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/Shared/loading.dart';
-import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
-import 'package:vit_app/src/widgets/TimelinePost.dart';
+import 'package:vit_app/src/widgets/NoticeItem.dart';
+
+List<DocumentSnapshot> _list;
 
 class TimeLine extends StatefulWidget {
   @override
@@ -23,31 +24,22 @@ class _TimeLineState extends State<TimeLine> {
 
   Widget buildTimeline() {
     return StreamBuilder(
-      stream: timelineRef
-          .doc(currentUser.dept + currentUser.division + currentUser.year)
-          .collection('timelinePosts')
-          .orderBy('timestamp', descending: false)
-          .snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
-        if (!snapshots.hasData) {
-          return loadingScreen();
-        }
-        List<TimelinePost> timelinePosts = [];
-        snapshots.data.docs.forEach((documentSnapshot) {
-          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
+        stream: timelineRef
+            .doc(currentUser.dept + currentUser.division + currentUser.year)
+            .collection('timelinePosts')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
+          if (!snapshots.hasData) {
+            return loadingScreen();
+          }
+          _list = snapshots.data.docs;
+          return ListView.builder(
+            itemCount: _list.length,
+            itemBuilder: (context, index) {
+              return buildNoticeItem(context, _list[index]);
+            },
+          );
         });
-
-        return timelinePosts.isEmpty
-            ? Center(
-                child: Text(
-                  'No Notice For Now!',
-                  style: TextStyle(color: kPrimaryColor, fontSize: 16.0),
-                ),
-              )
-            : ListView(
-                children: timelinePosts,
-              );
-      },
-    );
   }
 }
