@@ -51,15 +51,6 @@ class _HomePageState extends State<HomePage> {
     pageController = PageController(initialPage: 0);
   }
 
-  void _signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(context, BouncyPageRoute(widget: MyApp()));
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void dispose() {
     pageController.dispose();
@@ -96,11 +87,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 : null,
             body: PageView(
-              children: <Widget>[
-                TimeLine(currentUser: currentUser),
-                NotesSection(),
-                ProfilePage()
-              ],
+              children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
               controller: pageController,
               onPageChanged: onPageChanged,
               physics: NeverScrollableScrollPhysics(),

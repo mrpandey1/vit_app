@@ -236,15 +236,10 @@ class _StudentRegistrationState extends State<StudentRegistration> {
         'isRegistered': true,
         'division': divisionValue,
         'year': yearValue,
+        'rollNumber':
+            '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
       });
-      await studentRef
-          .doc(departmentValue)
-          .collection('$yearValue')
-          .doc(currentUser.id)
-          .update(({
-            'rollNumber':
-                '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
-          }));
+
       await userRef.doc(currentUser.id).update({
         'isRegistered': true,
         'rollNumber':
