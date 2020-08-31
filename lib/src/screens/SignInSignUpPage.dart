@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/Shared/header.dart';
+import 'package:vit_app/src/Shared/snackbar.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
@@ -75,17 +76,21 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       String userId = '';
       try {
         if (_formState == STATE.SIGNIN) {
-          userId = await widget.auth.signIn(
-              emailController.text.trim(), passwordController.text.trim());
+          userId = await widget.auth
+              .signIn(
+                  emailController.text.trim(), passwordController.text.trim())
+              .then((value) {
+            print('done');
+          }).catchError((e) => {
+                    _scaffoldKey.currentState.showSnackBar(snackBar(context,
+                        isErrorSnackbar: true, errorText: e.toString()))
+                  });
           if (userId == null) {
             setState(() {
               _isLoading = false;
             });
-            SnackBar snackBar = SnackBar(
-              content: Text('Email is not verified (Check your inbox)'),
-              backgroundColor: Colors.red,
-            );
-            _scaffoldKey.currentState.showSnackBar(snackBar);
+            _scaffoldKey.currentState.showSnackBar(snackBar(context,
+                errorText: 'Email is not verified (check your inbox'));
           } else {
             // ----------- EMAIL IS VERIFIED -----------
             Navigator.pushReplacement(

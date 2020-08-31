@@ -103,17 +103,5 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           );
-    // : Scaffold(
-    //     appBar: header(context, isAppTitle: true, isLogout: true),
-    //     body: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: <Widget>[
-    //         Center(
-    //           child: Text('Hello ${currentUser.admin}'),
-    //         ),
-    //       ],
-    //     ),
-    //   );
   }
 }
