@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
+  bool isAdmin = false;
   @override
   void initState() {
     super.initState();
@@ -52,6 +53,10 @@ class _HomePageState extends State<HomePage> {
       }
     });
     pageController = PageController(initialPage: 0);
+  }
+
+  adminOrNot(currentUser) {
+    return currentUser.admin;
   }
 
   @override
@@ -91,8 +96,7 @@ class _HomePageState extends State<HomePage> {
                 : null,
             body: PageView(
               children: <Widget>[
-//                currentUser.admin ? AdmintimeLine() : TimeLine(),
-                TimeLine(),
+                TimeLine(currentUser: currentUser),
                 NotesSection(),
                 ProfilePage()
               ],

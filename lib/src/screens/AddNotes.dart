@@ -6,9 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vit_app/src/shared/header.dart';
+import 'package:vit_app/src/Shared/header.dart';
 import 'package:path/path.dart' as path;
-import 'package:vit_app/src/shared/loading.dart';
+import 'package:vit_app/src/Shared/loading.dart';
 import 'HomePage.dart';
 
 import '../constants.dart';
@@ -280,7 +280,6 @@ class _AddNotesState extends State<AddNotes> {
     setState(() {
       _loading = true;
     });
-
     QuerySnapshot querySnapshot =
         await subjectsRef.doc(departmentValue).collection(yearValue).get();
 
