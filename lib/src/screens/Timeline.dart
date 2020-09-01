@@ -24,7 +24,11 @@ class _TimeLineState extends State<TimeLine> {
         child: Column(
           children: [
             buildTimeline(),
-            buildAllTimeline('INFT', 'All', 'Third'),
+            buildAllTimeline(currentUser.dept, 'All', 'All'),
+            buildAllTimeline(currentUser.dept, 'All', currentUser.year),
+            buildAllTimeline('All', currentUser.division, currentUser.year),
+            buildAllTimeline('All', 'All', currentUser.year),
+            buildAllTimeline('All', 'All', 'All'),
           ],
         ),
       ),
@@ -65,7 +69,7 @@ class _TimeLineState extends State<TimeLine> {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (!snapshots.hasData) {
-            return loadingScreen();
+            return CircularProgressIndicator();
           }
           _list = snapshots.data.docs;
           return ListView.builder(
