@@ -18,6 +18,8 @@ final userRef = FirebaseFirestore.instance.collection('users');
 final studentRef = FirebaseFirestore.instance.collection('students');
 final timelineRef = FirebaseFirestore.instance.collection('timeline');
 final postRef = FirebaseFirestore.instance.collection('posts');
+final subjectsRef = FirebaseFirestore.instance.collection('subjects');
+final notesRef = FirebaseFirestore.instance.collection('notes');
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 
 VITUser currentUser;
