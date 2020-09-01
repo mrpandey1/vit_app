@@ -9,6 +9,7 @@ import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/AdminFeatures.dart';
+import 'package:vit_app/src/screens/AdmintimeLine.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
 import 'package:vit_app/src/screens/StudentRegistration.dart';
@@ -28,7 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = true;
+  bool _loading = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
@@ -87,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                   )
                 : null,
             body: PageView(
-              children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
+              children: <Widget>[
+                currentUser.admin ? AdmintimeLine() : TimeLine(),
+                NotesSection(),
+                ProfilePage()
+              ],
               controller: pageController,
               onPageChanged: onPageChanged,
               physics: NeverScrollableScrollPhysics(),

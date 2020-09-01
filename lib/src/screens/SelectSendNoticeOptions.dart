@@ -203,7 +203,7 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
       'timestamp': DateTime.now(),
       'to': departmentValue + divisionValue + yearValue
     }).then((value) {
-      postRef.doc(currentUser.id).collection(departmentValue).doc(postId).set({
+      postRef.doc(departmentValue).collection(divisionValue).doc(postId).set({
         'postId': postId,
         'ownerId': currentUser.id,
         'from': widget.fromText,
