@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/NoticeItem.dart';
+import 'package:vit_app/src/widgets/TimelineLoadingPlaceholder.dart';
 
 class TimeLine extends StatefulWidget {
   @override
@@ -45,7 +46,11 @@ class _TimeLineState extends State<TimeLine> {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (!snapshots.hasData) {
-            return loadingScreen();
+            return ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return LoadingContainer();
+                });
           }
           _list = snapshots.data.docs;
           return ListView.builder(
