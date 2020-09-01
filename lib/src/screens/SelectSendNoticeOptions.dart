@@ -30,6 +30,14 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     'B',
   ];
   List years = ['All', 'First', 'Second', 'Third', 'Fourth'];
+
+  List lDepartments = ['INFT'];
+  List lDivisions = [
+    'A',
+    'B',
+  ];
+  List lYears = ['First', 'Second', 'Third', 'Fourth'];
+
   String departmentValue;
   String divisionValue;
   String yearValue;
@@ -186,39 +194,101 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
     setState(() {
       _loading = true;
     });
-    String mediaUrl = '';
-    if (widget.file != null) {
-      mediaUrl = await uploadImage(widget.file);
-    }
-    await timelineRef
-        .doc(departmentValue + divisionValue + yearValue)
-        .collection('timelinePosts')
-        .doc(postId)
-        .set({
-      'postId': postId,
-      'ownerId': currentUser.id,
-      'from': widget.fromText,
-      'mediaUrl': mediaUrl,
-      'notice': widget.noticeText,
-      'timestamp': DateTime.now(),
-      'to': departmentValue + divisionValue + yearValue
-    }).then((value) {
-      postRef.doc(departmentValue).collection(divisionValue).doc(postId).set({
+
+    try {
+      String mediaUrl = '';
+      if (widget.file != null) {
+        mediaUrl = await uploadImage(widget.file);
+      }
+
+      Map<String, dynamic> data = {
         'postId': postId,
         'ownerId': currentUser.id,
         'from': widget.fromText,
         'mediaUrl': mediaUrl,
         'notice': widget.noticeText,
         'timestamp': DateTime.now(),
-        'to': departmentValue + divisionValue + yearValue
-      }).then((value) {
-        _scaffoldKey.currentState.showSnackBar(snackBar(context,
-            isErrorSnackbar: false, successText: 'Notice sent Successfully'));
-      }).catchError((e) {
-        _scaffoldKey.currentState.showSnackBar(snackBar(context,
-            isErrorSnackbar: true, errorText: 'Something went wrong'));
-      });
-    });
+      };
+
+      if (departmentValue == 'All' &&
+          divisionValue == 'All' &&
+          yearValue == 'All') {
+        lDepartments.forEach((dept) {
+          lDivisions.forEach((div) {
+            lYears.forEach((year) async {
+              await timelineRef
+                  .doc(dept + div + year)
+                  .collection('timelinePosts')
+                  .doc(postId)
+                  .set(data);
+            });
+          });
+        });
+      } else if (departmentValue == 'All') {
+        lDepartments.forEach((dept) async {
+          await timelineRef
+              .doc(dept + divisionValue + yearValue)
+              .collection('timelinePosts')
+              .doc(postId)
+              .set(data);
+        });
+      } else if (departmentValue == 'All' && divisionValue == 'All') {
+        lDepartments.forEach((dept) {
+          lDivisions.forEach((div) async {
+            await timelineRef
+                .doc(dept + div + yearValue)
+                .collection('timelinePosts')
+                .doc(postId)
+                .set(data);
+          });
+        });
+      } else if (divisionValue == 'All') {
+        lDivisions.forEach((div) async {
+          await timelineRef
+              .doc(departmentValue + div + yearValue)
+              .collection('timelinePosts')
+              .doc(postId)
+              .set(data);
+        });
+      } else if (divisionValue == 'All' && yearValue == 'All') {
+        lDivisions.forEach((div) {
+          lYears.forEach((year) async {
+            await timelineRef
+                .doc(departmentValue + div + year)
+                .collection('timelinePosts')
+                .doc(postId)
+                .set(data);
+          });
+        });
+      } else if (yearValue == 'All') {
+        lYears.forEach((year) async {
+          await timelineRef
+              .doc(departmentValue + divisionValue + year)
+              .collection('timelinePosts')
+              .doc(postId)
+              .set(data);
+        });
+      } else {
+        await timelineRef
+            .doc(departmentValue + divisionValue + yearValue)
+            .collection('timelinePosts')
+            .doc(postId)
+            .set(data);
+      }
+
+      await postRef
+          .doc(departmentValue)
+          .collection(divisionValue)
+          .doc(postId)
+          .set(data);
+
+      _scaffoldKey.currentState.showSnackBar(snackBar(context,
+          isErrorSnackbar: false, successText: 'Notice sent Successfully'));
+    } catch (e) {
+      _scaffoldKey.currentState.showSnackBar(snackBar(context,
+          isErrorSnackbar: true, errorText: 'Something went wrong'));
+    }
+
     setState(() {
       _loading = false;
     });
