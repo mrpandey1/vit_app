@@ -91,7 +91,8 @@ class _HomePageState extends State<HomePage> {
                 : null,
             body: PageView(
               children: <Widget>[
-                currentUser.admin ? AdmintimeLine() : TimeLine(),
+//                currentUser.admin ? AdmintimeLine() : TimeLine(),
+                TimeLine(),
                 NotesSection(),
                 ProfilePage()
               ],
