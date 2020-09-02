@@ -73,6 +73,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildAdminProfileScreen(context) {
+    List<String> division = ['All', 'A', 'B'];
+    List<String> year = ['All', 'First', 'Second', 'Third', 'Fourth'];
     return Scaffold(
       body: Container(
         child: Column(
@@ -116,13 +118,8 @@ class _ProfilePageState extends State<ProfilePage> {
             FlatButton(
               child: Text('INFT'),
               onPressed: () => {
-                Navigator.push(
-                    context,
-                    BouncyPageRoute(
-                        widget: DepartmentPosts(
-                      dept: 'INFT',
-                      division: 'B',
-                    )))
+                Navigator.push(context,
+                    BouncyPageRoute(widget: DepartmentPosts(dept: 'INFT')))
               },
             )
           ],

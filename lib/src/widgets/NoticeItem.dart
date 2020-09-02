@@ -82,50 +82,163 @@ Widget buildPostHeader(
                 context,
                 documentSnapshot.data()['ownerId'],
                 documentSnapshot.data()['postId'],
-                documentSnapshot.data()['to'],
+                documentSnapshot.data()['toDepartment'],
+                documentSnapshot.data()['toDivision'],
+                documentSnapshot.data()['toYear'],
                 documentSnapshot),
           )
         : null,
   );
 }
 
-deletePost(BuildContext context, String ownerId, String postId, String to,
-    DocumentSnapshot documentSnapshot) async {
-  postRef
-      .doc(ownerId)
-      .collection(to.substring(0, 4))
-      .doc(postId)
-      .get()
-      .then((doc) {
+deletePost(BuildContext context, String ownerId, String postId, String toDept,
+    String toDivi, String toYear, DocumentSnapshot documentSnapshot) async {
+  List lDepartments = ['INFT'];
+  List lDivisions = [
+    'A',
+    'B',
+  ];
+  List lYears = ['First', 'Second', 'Third', 'Fourth'];
+  postRef.doc(toDept).collection(toYear + toDivi).doc(postId).get().then((doc) {
     if (doc.exists) {
       doc.reference.delete();
     }
   });
-  timelineRef
-      .doc(to)
-      .collection('timelinePosts')
-      .doc(postId)
-      .get()
-      .then((value) {
-    if (value.exists) {
-      value.reference.delete();
-    }
-  });
+  if (toDept == 'All' && toDivi == 'All' && toYear == 'All') {
+    lDepartments.forEach((dept) {
+      lDivisions.forEach((div) {
+        lYears.forEach((year) async {
+          await timelineRef
+              .doc(dept + div + year)
+              .collection('timelinePosts')
+              .doc(postId)
+              .get()
+              .then((value) {
+            if (value.exists) {
+              value.reference.delete();
+            }
+          });
+        });
+      });
+    });
+  } else if (toDept == 'All' && toDivi == 'All' && toYear != 'All') {
+    lDepartments.forEach((dept) {
+      lDivisions.forEach((div) async {
+        await timelineRef
+            .doc(dept + div + toYear)
+            .collection('timelinePosts')
+            .doc(postId)
+            .get()
+            .then((value) {
+          if (value.exists) {
+            value.reference.delete();
+          }
+        });
+      });
+    });
+  } else if (toDept == 'All' && toDivi != 'All' && toYear == 'All') {
+    lDepartments.forEach((dept) {
+      lYears.forEach((years) async {
+        await timelineRef
+            .doc(dept + toDivi + lYears)
+            .collection('timelinePosts')
+            .doc(postId)
+            .get()
+            .then((value) {
+          if (value.exists) {
+            value.reference.delete();
+          }
+        });
+      });
+    });
+  } else if (toDept != 'All' && toDivi != 'All' && toYear == 'All') {
+    lYears.forEach((years) async {
+      await timelineRef
+          .doc(toDept + toDivi + years)
+          .collection('timelinePosts')
+          .doc(postId)
+          .get()
+          .then((value) {
+        if (value.exists) {
+          value.reference.delete();
+        }
+      });
+    });
+  } else if (toDept != 'All' && toDivi == 'All' && toYear != 'All') {
+    lDivisions.forEach((divi) async {
+      await timelineRef
+          .doc(toDept + divi + toYear)
+          .collection('timelinePosts')
+          .doc(postId)
+          .get()
+          .then((value) {
+        if (value.exists) {
+          value.reference.delete();
+        }
+      });
+    });
+  } else if (toDept != 'All' && toDivi == 'All' && toYear == 'All') {
+    lDivisions.forEach((divi) {
+      lYears.forEach((years) async {
+        await timelineRef
+            .doc(toDept + divi + years)
+            .collection('timelinePosts')
+            .doc(postId)
+            .get()
+            .then((value) {
+          if (value.exists) {
+            value.reference.delete();
+          }
+        });
+      });
+    });
+  } else if (toDept == 'All' && toDivi != 'All' && toYear != 'All') {
+    lDepartments.forEach((dept) async {
+      await timelineRef
+          .doc(dept + toDivi + toYear)
+          .collection('timelinePosts')
+          .doc(postId)
+          .get()
+          .then((value) {
+        if (value.exists) {
+          value.reference.delete();
+        }
+      });
+    });
+  } else {
+    await timelineRef
+        .doc(toDept + toDivi + toYear)
+        .collection('timelinePosts')
+        .doc(postId)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        value.reference.delete();
+      }
+    });
+  }
+
   if (documentSnapshot.data()['mediaUrl'] != '') {
     storageRef.child('posts').child('post_$postId.jpg').delete();
   }
   Navigator.pop(context);
 }
 
-handleDeletePost(BuildContext parentContext, String ownerId, String postId,
-    String to, DocumentSnapshot documentSnapshot) {
+handleDeletePost(
+    BuildContext parentContext,
+    String ownerId,
+    String postId,
+    String toDept,
+    String toDivi,
+    String toYear,
+    DocumentSnapshot documentSnapshot) {
   return showDialog(
       context: parentContext,
       builder: (context) {
         return SimpleDialog(title: Text("Remove this post"), children: <Widget>[
           SimpleDialogOption(
-            onPressed: () =>
-                deletePost(context, ownerId, postId, to, documentSnapshot),
+            onPressed: () => deletePost(context, ownerId, postId, toDept,
+                toDivi, toYear, documentSnapshot),
             child: Text(
               'Delete',
               style: TextStyle(color: Colors.red),

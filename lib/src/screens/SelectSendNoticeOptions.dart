@@ -208,6 +208,9 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
         'mediaUrl': mediaUrl,
         'notice': widget.noticeText,
         'timestamp': DateTime.now(),
+        'toDepartment': departmentValue,
+        'toDivision': divisionValue,
+        'toYear': yearValue
       };
 
       if (departmentValue == 'All' &&
@@ -224,7 +227,9 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
             });
           });
         });
-      } else if (departmentValue == 'All') {
+      } else if (departmentValue == 'All' &&
+          divisionValue != 'All' &&
+          yearValue != 'All') {
         lDepartments.forEach((dept) async {
           await timelineRef
               .doc(dept + divisionValue + yearValue)
@@ -232,7 +237,9 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
               .doc(postId)
               .set(data);
         });
-      } else if (departmentValue == 'All' && divisionValue == 'All') {
+      } else if (departmentValue == 'All' &&
+          divisionValue == 'All' &&
+          yearValue != 'all') {
         lDepartments.forEach((dept) {
           lDivisions.forEach((div) async {
             await timelineRef
@@ -242,7 +249,9 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
                 .set(data);
           });
         });
-      } else if (divisionValue == 'All') {
+      } else if (departmentValue != 'All' &&
+          divisionValue == 'All' &&
+          yearValue != 'All') {
         lDivisions.forEach((div) async {
           await timelineRef
               .doc(departmentValue + div + yearValue)
@@ -250,7 +259,9 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
               .doc(postId)
               .set(data);
         });
-      } else if (divisionValue == 'All' && yearValue == 'All') {
+      } else if (departmentValue != 'All' &&
+          divisionValue == 'All' &&
+          yearValue == 'All') {
         lDivisions.forEach((div) {
           lYears.forEach((year) async {
             await timelineRef
@@ -260,13 +271,27 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
                 .set(data);
           });
         });
-      } else if (yearValue == 'All') {
+      } else if (departmentValue != 'All' &&
+          divisionValue != 'All' &&
+          yearValue == 'All') {
         lYears.forEach((year) async {
           await timelineRef
               .doc(departmentValue + divisionValue + year)
               .collection('timelinePosts')
               .doc(postId)
               .set(data);
+        });
+      } else if (departmentValue == 'All' &&
+          divisionValue != 'All' &&
+          yearValue == 'All') {
+        lDepartments.forEach((dept) {
+          lYears.forEach((year) async {
+            await timelineRef
+                .doc(dept + divisionValue + year)
+                .collection('timelinePosts')
+                .doc(postId)
+                .set(data);
+          });
         });
       } else {
         await timelineRef
@@ -278,7 +303,7 @@ class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
 
       await postRef
           .doc(departmentValue)
-          .collection(divisionValue)
+          .collection(yearValue + divisionValue)
           .doc(postId)
           .set(data);
 
