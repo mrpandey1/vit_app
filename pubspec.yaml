@@ -39,9 +39,14 @@ dependencies:
   firebase_storage:
   uuid: ^2.0.4
   image: ^2.0.7
-  path_provider: ^0.5.0+1
+  path_provider:
   cached_network_image:
   timeago:
+  url_launcher: ^5.5.2
+  advance_pdf_viewer: ^1.2.0
+
+
+
 
 
 

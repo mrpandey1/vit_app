@@ -19,12 +19,9 @@ class AddNotes extends StatefulWidget {
 }
 
 class _AddNotesState extends State<AddNotes> {
-  String fileType = '';
   File file;
   String fileName = '';
-  String operationText = '';
   bool isUploaded = true;
-  String result = '';
 
   List subjects = [];
   bool _loading = false;
@@ -254,8 +251,6 @@ class _AddNotesState extends State<AddNotes> {
       setState(() {
         fileName = path.basename(file.path);
       });
-
-      print(fileName);
     } on PlatformException catch (e) {
       showDialog(
           context: parentContext,
@@ -316,8 +311,6 @@ class _AddNotesState extends State<AddNotes> {
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
-
-//    /notes/INFT/Notes/First/ADBMS/p7TEFLqfwdJI30HpbUz3
 
     await notesRef
         .doc(departmentValue)

@@ -7,7 +7,7 @@ import 'package:vit_app/src/widgets/NoticeItem.dart';
 import 'package:vit_app/src/widgets/TimelineLoadingPlaceholder.dart';
 
 class TimeLine extends StatefulWidget {
-  VITUser currentUser;
+  final VITUser currentUser;
   TimeLine({this.currentUser});
   @override
   _TimeLineState createState() => _TimeLineState();
@@ -43,14 +43,18 @@ class _TimeLineState extends State<TimeLine> {
                 });
           }
           _list = snapshots.data.docs;
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: _list.length,
-            itemBuilder: (context, index) {
-              return buildNoticeItem(context, _list[index]);
-            },
-          );
+          return _list.length == 0
+              ? Center(
+                  child: Text('No Notice For Now!'),
+                )
+              : ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: _list.length,
+                  itemBuilder: (context, index) {
+                    return buildNoticeItem(context, _list[index]);
+                  },
+                );
         });
   }
 }
