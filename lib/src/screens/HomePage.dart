@@ -83,22 +83,8 @@ class _HomePageState extends State<HomePage> {
             body: loadingScreen(),
           )
         : Scaffold(
-            floatingActionButton: currentUser.admin
-                ? FloatingActionButton(
-                    child: Icon(Icons.add),
-                    backgroundColor: kPrimaryColor,
-                    onPressed: () => {
-                      Navigator.push(
-                          context, BouncyPageRoute(widget: AdminFeatures()))
-                    },
-                  )
-                : null,
             body: PageView(
-              children: <Widget>[
-                TimeLine(currentUser: currentUser),
-                NotesSection(),
-                ProfilePage()
-              ],
+              children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
               controller: pageController,
               onPageChanged: onPageChanged,
               physics: NeverScrollableScrollPhysics(),

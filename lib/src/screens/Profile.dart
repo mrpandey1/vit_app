@@ -9,10 +9,11 @@ import 'package:vit_app/src/screens/DepartmentPosts.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/TimelinePost.dart';
 
+import 'AddNotes.dart';
+import 'AddNotice.dart';
+
 class ProfilePage extends StatefulWidget {
   final userRef = FirebaseFirestore.instance.collection('users');
-  VITUser currentUser;
-  ProfilePage({this.currentUser});
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -58,49 +59,164 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildAdminProfileScreen(context) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              height: 200.0,
-              child: new Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                    child: new Stack(fit: StackFit.loose, children: <Widget>[
-                      new Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Container(
-                            width: 140.0,
-                            height: 140.0,
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://cdn2.iconfinder.com/data/icons/men-avatars/33/man_19-512.png',
-                              placeholder: (context, url) => Container(
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+    return Column(
+      children: [
+        Container(
+          height: 200.0,
+          child: new Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: 120.0,
+                          height: 120.0,
+                          child:
+                              Image.asset('assets/images/default-profile.png'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Admin ',
+                            style: TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
-                        ],
-                      ),
-                    ]),
-                  )
-                ],
-              ),
-            ),
-            Divider(
-              color: kPrimaryColor,
-            ),
-          ],
+                        ),
+                        Container(
+                          child: Icon(
+                            Icons.stars,
+                            color: Colors.green,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
+        Divider(color: kPrimaryColor),
+        Expanded(
+          child: ListView(
+            children: [
+              GestureDetector(
+                onTap: () => {
+                  Navigator.push(context, BouncyPageRoute(widget: AddNotice()))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15.0, right: 15.0, top: 12.0),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 120.0,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: LinearGradient(
+                            colors: [Colors.indigoAccent, Colors.blue],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: Image.asset(
+                            'assets/images/notice.png',
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 45.0,
+                        left: 130.0,
+                        child: Container(
+                          child: Text(
+                            'Add Notice',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => {
+                  Navigator.push(context, BouncyPageRoute(widget: AddNotes()))
+                },
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 15.0, right: 15.0, top: 12.0),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 120.0,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(5.0),
+                          gradient: LinearGradient(
+                            colors: [Colors.pink, Colors.red],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(25.0),
+                          child: Image.asset(
+                            'assets/images/notes.png',
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 45.0,
+                        left: 130.0,
+                        child: Container(
+                          child: Text(
+                            'Add Notes',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
