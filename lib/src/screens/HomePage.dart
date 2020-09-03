@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
               activeColor: kPrimaryColor,
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-                BottomNavigationBarItem(icon: Icon(Icons.notifications)),
+                BottomNavigationBarItem(icon: Icon(Icons.library_books)),
                 BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
               ],
             ),
