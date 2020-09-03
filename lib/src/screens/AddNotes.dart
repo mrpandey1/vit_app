@@ -27,13 +27,8 @@ class _AddNotesState extends State<AddNotes> {
   bool _loading = false;
   bool foo = false;
 
-  List departments = ['All', 'INFT'];
-  List divisions = [
-    'All',
-    'A',
-    'B',
-  ];
-  List years = ['All', 'First', 'Second', 'Third', 'Fourth'];
+  List departments = ['INFT'];
+  List years = ['First', 'Second', 'Third', 'Fourth'];
   String departmentValue;
   String yearValue;
   String subjectValue;

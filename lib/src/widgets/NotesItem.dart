@@ -162,6 +162,9 @@ deleteNotes(BuildContext context, DocumentSnapshot documentSnapshot) async {
     await doc.reference.delete();
     await storageRef.child(dept).child(year).child(fileName).delete();
     Navigator.pop(context);
+//    _scaffoldKey.currentState.showSnackBar(snackBar(context,
+//        isErrorSnackbar: false,
+//        successText: 'Email sent successfully'))
   } else {
     // Error
     Navigator.pop(context);
