@@ -51,7 +51,7 @@ class _DepartmentPostsState extends State<DepartmentPosts> {
           Container(
             padding: EdgeInsets.only(left: 20.0, right: 20.0),
             child: DropdownButtonFormField(
-              hint: Text('Select year'),
+              hint: Text('Select division'),
               isExpanded: true,
               onChanged: (value) {
                 setState(() {

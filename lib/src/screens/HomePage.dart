@@ -9,7 +9,6 @@ import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/AdminFeatures.dart';
-import 'package:vit_app/src/screens/AdmintimeLine.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
 import 'package:vit_app/src/screens/StudentRegistration.dart';
@@ -21,6 +20,7 @@ final timelineRef = FirebaseFirestore.instance.collection('timeline');
 final postRef = FirebaseFirestore.instance.collection('posts');
 final subjectsRef = FirebaseFirestore.instance.collection('subjects');
 final notesRef = FirebaseFirestore.instance.collection('notes');
+final departmentRef = FirebaseFirestore.instance.collection('departments');
 final StorageReference storageRef = FirebaseStorage.instance.ref();
 
 VITUser currentUser;
@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
             body: loadingScreen(),
           )
         : Scaffold(
-            appBar: header(context, isAppTitle: true, isLogout: true),
             floatingActionButton: currentUser.admin
                 ? FloatingActionButton(
                     child: Icon(Icons.add),
