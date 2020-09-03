@@ -226,7 +226,6 @@ class _ProfilePageState extends State<ProfilePage> {
         children: <Widget>[
           //profile pic start
           Container(
-            height: 200.0,
             child: new Column(
               children: <Widget>[
                 Padding(
@@ -239,17 +238,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         new Container(
                           width: 140.0,
                           height: 140.0,
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://cdn2.iconfinder.com/data/icons/men-avatars/33/man_19-512.png',
-                            placeholder: (context, url) => Container(
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
+                          child:
+                              Image.asset('assets/images/default-profile.png'),
                         ),
                       ],
                     ),
@@ -259,44 +249,104 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           //profile pic ending
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(name),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 10.0),
+              Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Student',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                SizedBox(
-                  height: 20,
+              ),
+              SizedBox(height: 7.0),
+              Container(
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      currentUser.dept,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      ' ${currentUser.division}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(email ?? ''),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Text(rollNumber ?? ''),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                // FlatButton(
-                //   onPressed: () => Navigator.push(
-                //       context,
-                //       BouncyPageRoute(
-                //           widget: EditProfile(
-                //         currentUser: currentUser,
-                //       ))),
-                //   child: Text('Change profile'),
-                // )
-              ],
-            ),
+              ),
+              SizedBox(height: 10.0),
+              Divider(color: kPrimaryColor.withOpacity(0.4)),
+              SizedBox(height: 10.0),
+              buildStudentFields('Name', name),
+              buildStudentFields('Email', email),
+              buildStudentFields('Roll Number', rollNumber, isLast: true),
+              // FlatButton(
+              //   onPressed: () => Navigator.push(
+              //       context,
+              //       BouncyPageRoute(
+              //           widget: EditProfile(
+              //         currentUser: currentUser,
+              //       ))),
+              //   child: Text('Change profile'),
+              // )
+            ],
           )
         ],
       ),
+    );
+  }
+
+  Widget buildStudentFields(String title, String value, {bool isLast = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 7.0),
+        Container(
+          padding: EdgeInsets.only(left: 15.0),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: kPrimaryColor,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 4.0,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 15.0),
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+        SizedBox(height: 5.0),
+        !isLast
+            ? Divider(
+                color: kPrimaryColor.withOpacity(0.4),
+                indent: 15.0,
+                endIndent: 15.0,
+              )
+            : Container(
+                height: 0,
+                width: 0,
+              ),
+      ],
     );
   }
 }
