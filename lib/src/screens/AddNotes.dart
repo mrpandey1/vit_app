@@ -323,6 +323,8 @@ class _AddNotesState extends State<AddNotes> {
       'from': _fromController.text,
       'subject': subjectValue,
       'fileName': fileName,
+      'year': yearValue,
+      'dept': departmentValue,
       'timestamp': DateTime.now(),
     });
 

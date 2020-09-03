@@ -71,6 +71,7 @@ flutter:
     - assets/images/notice.png
     - assets/images/upload.jpg
     - assets/images/notes.png
+    - assets/images/pdf.png
     - assets/images/default-profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

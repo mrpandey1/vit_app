@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
-import 'package:vit_app/src/model/user.dart';
-import 'package:vit_app/src/screens/DepartmentPosts.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/TimelinePost.dart';
 

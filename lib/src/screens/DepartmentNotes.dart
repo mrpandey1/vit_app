@@ -10,7 +10,7 @@ List<DocumentSnapshot> _list;
 String yearValue;
 
 class DepartmentNotes extends StatefulWidget {
-  String dept;
+  final String dept;
   DepartmentNotes({this.dept});
   @override
   _DepartmentNotesState createState() => _DepartmentNotesState();

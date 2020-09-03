@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/constants.dart';
-import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/DepartmentPosts.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/NoticeItem.dart';
@@ -133,6 +132,7 @@ class _TimeLineState extends State<TimeLine> {
               : ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
                   itemCount: _list.length,
                   itemBuilder: (context, index) {
                     return buildNoticeItem(context, _list[index]);
