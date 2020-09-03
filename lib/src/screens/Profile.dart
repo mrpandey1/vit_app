@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
@@ -24,15 +25,17 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     getProfile();
-    getDocs();
-    gettingDocs();
   }
 
   @override
   Widget build(BuildContext context) {
-    return currentUser.admin
-        ? buildAdminProfileScreen(context)
-        : buildProfileScreen(context);
+    return Scaffold(
+      appBar: header(context,
+          isAppTitle: false, titleText: 'Profile', isLogout: true),
+      body: currentUser.admin
+          ? buildAdminProfileScreen(context)
+          : buildProfileScreen(context),
+    );
   }
 
   getProfile() async {
@@ -54,27 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future getDocs() async {
-    postRef
-        .doc(currentUser.id)
-        .collection(currentUser.dept)
-        .get()
-        .then((value) {
-      value.docs.forEach((DocumentSnapshot documentSnapshot) {
-        setState(() {
-          timelinePosts.add(TimelinePost.fromDocument(documentSnapshot));
-        });
-      });
-    });
-  }
-
-  gettingDocs() async {
-    QuerySnapshot snapshot = await postRef.get();
-  }
-
   Widget buildAdminProfileScreen(context) {
-    List<String> division = ['All', 'A', 'B'];
-    List<String> year = ['All', 'First', 'Second', 'Third', 'Fourth'];
     return Scaffold(
       body: Container(
         child: Column(
@@ -115,13 +98,6 @@ class _ProfilePageState extends State<ProfilePage> {
             Divider(
               color: kPrimaryColor,
             ),
-            FlatButton(
-              child: Text('INFT'),
-              onPressed: () => {
-                Navigator.push(context,
-                    BouncyPageRoute(widget: DepartmentPosts(dept: 'INFT')))
-              },
-            )
           ],
         ),
       ),

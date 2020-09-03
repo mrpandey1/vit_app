@@ -45,9 +45,9 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
     try {
       await widget.auth
           .sendPasswordResetLink(email)
-          .then((value) => {
+          .whenComplete(() => {
                 _scaffoldKey.currentState.showSnackBar(snackBar(context,
-                    isErrorSnackbar: true,
+                    isErrorSnackbar: false,
                     successText: 'Email sent successfully'))
               })
           .catchError((e) => {

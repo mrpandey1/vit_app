@@ -1,42 +1,69 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
+import 'package:vit_app/src/ShowNotes.dart';
 import 'package:vit_app/src/constants.dart';
-import 'package:vit_app/src/model/user.dart';
-import 'package:vit_app/src/screens/DepartmentPosts.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
-import 'package:vit_app/src/widgets/NoticeItem.dart';
-import 'package:vit_app/src/widgets/TimelineLoadingPlaceholder.dart';
 
 List<DocumentSnapshot> _list;
+String yearValue;
 
-class TimeLine extends StatefulWidget {
-  final VITUser currentUser;
-  TimeLine({this.currentUser});
+class DepartmentNotes extends StatefulWidget {
+  String dept;
+  DepartmentNotes({this.dept});
   @override
-  _TimeLineState createState() => _TimeLineState();
+  _DepartmentNotesState createState() => _DepartmentNotesState();
 }
 
-class _TimeLineState extends State<TimeLine> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _DepartmentNotesState extends State<DepartmentNotes> {
+  String divValue;
+  List<String> years = ['First', 'Second', 'Third', 'Fourth'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: header(context,
-            isAppTitle: false, titleText: 'Notices', isLogout: false),
-        body: currentUser.admin ? adminTimeline() : buildTimeline());
+      appBar: header(context,
+          isAppTitle: false, titleText: 'Select year', removeBack: true),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            child: DropdownButtonFormField(
+              hint: Text('Select Year'),
+              isExpanded: true,
+              onChanged: (value) {
+                setState(() {
+                  yearValue = value;
+                });
+              },
+              validator: (value) =>
+                  value == null ? 'This field is required' : null,
+              items: years.map((value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: Text(
+                    '$value',
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          yearValue != null
+              ? Expanded(
+                  child: studentScreen(dept: widget.dept, year: yearValue),
+                )
+              : Container(
+                  height: 0,
+                )
+        ],
+      ),
+    );
   }
 
-  Widget adminTimeline() {
+  Widget studentScreen({String dept, String year}) {
     return Scaffold(
         body: FutureBuilder(
-      future: departmentRef.get(),
+      future: subjectsRef.doc(dept).collection(yearValue).get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) {
           return loadingScreen();
@@ -53,8 +80,8 @@ class _TimeLineState extends State<TimeLine> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DepartmentPosts(
-                                dept: documentSnapshot.id,
+                          builder: (context) => ShowNotes(
+                                subject: '${documentSnapshot.id}',
                               )),
                     )
                   },
@@ -107,39 +134,5 @@ class _TimeLineState extends State<TimeLine> {
         );
       },
     ));
-  }
-
-  Widget buildTimeline() {
-    List<DocumentSnapshot> _list;
-    return StreamBuilder(
-        stream: timelineRef
-            .doc(widget.currentUser.dept +
-                widget.currentUser.division +
-                widget.currentUser.year)
-            .collection('timelinePosts')
-            .orderBy('timestamp', descending: true)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
-          if (!snapshots.hasData) {
-            return ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return LoadingContainer();
-                });
-          }
-          _list = snapshots.data.docs;
-          return _list.length == 0
-              ? Center(
-                  child: Text('No Notice For Now!'),
-                )
-              : ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: _list.length,
-                  itemBuilder: (context, index) {
-                    return buildNoticeItem(context, _list[index]);
-                  },
-                );
-        });
   }
 }

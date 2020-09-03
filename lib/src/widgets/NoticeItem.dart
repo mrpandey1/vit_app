@@ -6,7 +6,6 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../constants.dart';
 
-
 Widget buildNoticeItem(
     BuildContext context, DocumentSnapshot documentSnapshot) {
   return Padding(
