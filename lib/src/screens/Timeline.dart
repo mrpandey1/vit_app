@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/constants.dart';
-import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/DepartmentPosts.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/widgets/NoticeItem.dart';
@@ -13,8 +12,6 @@ import 'package:vit_app/src/widgets/TimelineLoadingPlaceholder.dart';
 List<DocumentSnapshot> _list;
 
 class TimeLine extends StatefulWidget {
-  final VITUser currentUser;
-  TimeLine({this.currentUser});
   @override
   _TimeLineState createState() => _TimeLineState();
 }
@@ -35,87 +32,87 @@ class _TimeLineState extends State<TimeLine> {
 
   Widget adminTimeline() {
     return Scaffold(
-        body: FutureBuilder(
-      future: departmentRef.get(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return loadingScreen();
-        }
-        _list = snapshot.data.docs;
-        List<Padding> _listTiles = [];
-        _list.forEach(
-          (DocumentSnapshot documentSnapshot) {
-            _listTiles.add(
-              Padding(
-                padding: EdgeInsets.all(15.0),
-                child: GestureDetector(
-                  onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
+      body: FutureBuilder(
+        future: departmentRef.get(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return loadingScreen();
+          }
+          _list = snapshot.data.docs;
+          List<Padding> _listTiles = [];
+          _list.forEach(
+            (DocumentSnapshot documentSnapshot) {
+              _listTiles.add(
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: GestureDetector(
+                    onTap: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) => DepartmentPosts(
-                                dept: documentSnapshot.id,
-                              )),
-                    )
-                  },
-                  child: Container(
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
-                            border: Border.all(
-                              color: kPrimaryColor.withOpacity(0.6),
-                              width: 0.7,
-                            ),
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xff9921E8).withOpacity(0.9),
-                                kPrimaryColor
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                            dept: documentSnapshot.id,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '${documentSnapshot.id}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                      ),
+                    },
+                    child: Container(
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
                               color: Colors.white,
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: Border.all(
+                                color: kPrimaryColor.withOpacity(0.6),
+                                width: 0.7,
+                              ),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(0xff9921E8).withOpacity(0.9),
+                                  kPrimaryColor
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${documentSnapshot.id}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
 
-        return GridView.count(
-          crossAxisCount: 2,
-          children: _listTiles,
-          physics: BouncingScrollPhysics(),
-        );
-      },
-    ));
+          return GridView.count(
+            crossAxisCount: 2,
+            children: _listTiles,
+            physics: BouncingScrollPhysics(),
+          );
+        },
+      ),
+    );
   }
 
   Widget buildTimeline() {
     List<DocumentSnapshot> _list;
     return StreamBuilder(
         stream: timelineRef
-            .doc(widget.currentUser.dept +
-                widget.currentUser.division +
-                widget.currentUser.year)
+            .doc(currentUser.dept + currentUser.division + currentUser.year)
             .collection('timelinePosts')
             .orderBy('timestamp', descending: true)
             .snapshots(),
@@ -135,6 +132,7 @@ class _TimeLineState extends State<TimeLine> {
               : ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
                   itemCount: _list.length,
                   itemBuilder: (context, index) {
                     return buildNoticeItem(context, _list[index]);

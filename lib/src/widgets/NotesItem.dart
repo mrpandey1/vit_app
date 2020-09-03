@@ -1,9 +1,9 @@
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vit_app/src/screens/HomePage.dart';
 
 import '../constants.dart';
 
@@ -28,7 +28,7 @@ Widget buildNotesItem(BuildContext context, DocumentSnapshot documentSnapshot) {
               color: Colors.grey.withOpacity(0.5),
               height: 0.5,
             ),
-            buildPostImage(kPdfImage),
+            buildPostImage(),
             buildPostFooter(documentSnapshot),
           ],
         ),
@@ -53,6 +53,15 @@ Widget buildNotesHeader(
         ),
       ],
     ),
+    trailing: currentUser.admin
+        ? IconButton(
+            onPressed: () => {handleDeleteNotes(context, documentSnapshot)},
+            icon: Icon(
+              Icons.more_vert,
+              color: kPrimaryColor,
+            ),
+          )
+        : Container(height: 0, width: 0),
   );
 }
 
@@ -101,26 +110,13 @@ Widget buildPostFooter(DocumentSnapshot documentSnapshot) {
   );
 }
 
-Widget buildPostImage(String image) {
+Widget buildPostImage() {
   return Center(
     child: Padding(
       padding: EdgeInsets.all(5.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(5.0),
-        child: CachedNetworkImage(
-          imageUrl: image,
-          height: 100.0,
-          placeholder: (context, url) {
-            return Container(
-              height: 100.0,
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.3),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-            );
-          },
-          fit: BoxFit.fill,
-        ),
+      child: Image.asset(
+        'assets/images/pdf.png',
+        height: 80.0,
       ),
     ),
   );
@@ -146,4 +142,52 @@ downloadPdf(DocumentSnapshot documentSnapshot) async {
   } else {
     throw 'Could not launch $url';
   }
+}
+
+deleteNotes(BuildContext context, DocumentSnapshot documentSnapshot) async {
+  String dept = documentSnapshot.data()['dept'];
+  String year = documentSnapshot.data()['year'];
+  String subject = documentSnapshot.data()['subject'];
+  String fileName = documentSnapshot.data()['fileName'];
+
+  DocumentSnapshot doc = await notesRef
+      .doc(dept)
+      .collection('Notes')
+      .doc(year)
+      .collection(subject)
+      .doc(documentSnapshot.id)
+      .get();
+
+  if (doc.exists) {
+    await doc.reference.delete();
+    await storageRef.child(dept).child(year).child(fileName).delete();
+    Navigator.pop(context);
+//    _scaffoldKey.currentState.showSnackBar(snackBar(context,
+//        isErrorSnackbar: false,
+//        successText: 'Email sent successfully'))
+  } else {
+    // Error
+    Navigator.pop(context);
+  }
+}
+
+handleDeleteNotes(
+    BuildContext parentContext, DocumentSnapshot documentSnapshot) {
+  return showDialog(
+      context: parentContext,
+      builder: (context) {
+        return SimpleDialog(title: Text("Delete this note"), children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () => {deleteNotes(context, documentSnapshot)},
+            child: Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          SimpleDialogOption(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          )
+        ]);
+      });
 }

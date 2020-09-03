@@ -23,8 +23,8 @@ class MyAuth implements AuthFunc {
 
   @override
   Future<void> sendEmailVerification() {
-    var user = _firebaseAuth.currentUser;
-    user.sendEmailVerification();
+    final user = _firebaseAuth.currentUser;
+    return user.sendEmailVerification();
   }
 
   @override

@@ -264,7 +264,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     }
   }
 
-  Future<bool> _onBackPressed() {
+  _onBackPressed() {
     showDialog(
         context: context,
         builder: (BuildContext context) {

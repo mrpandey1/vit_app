@@ -27,13 +27,13 @@ class _ShowNotesState extends State<ShowNotes> {
         titleText: '${widget.subject}',
         bold: true,
       ),
-      body: FutureBuilder(
-        future: notesRef
+      body: StreamBuilder(
+        stream: notesRef
             .doc(currentUser.dept)
             .collection('Notes')
             .doc(currentUser.year)
             .collection(widget.subject)
-            .get(),
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
           if (!snapshots.hasData) {
             return loadingScreen();

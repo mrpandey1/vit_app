@@ -3,12 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/src/Shared/header.dart';
 import 'package:vit_app/src/Shared/loading.dart';
 import 'package:vit_app/src/animations/animatedPageRoute.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
-import 'package:vit_app/src/screens/AdminFeatures.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
 import 'package:vit_app/src/screens/StudentRegistration.dart';
@@ -83,22 +81,8 @@ class _HomePageState extends State<HomePage> {
             body: loadingScreen(),
           )
         : Scaffold(
-            floatingActionButton: currentUser.admin
-                ? FloatingActionButton(
-                    child: Icon(Icons.add),
-                    backgroundColor: kPrimaryColor,
-                    onPressed: () => {
-                      Navigator.push(
-                          context, BouncyPageRoute(widget: AdminFeatures()))
-                    },
-                  )
-                : null,
             body: PageView(
-              children: <Widget>[
-                TimeLine(currentUser: currentUser),
-                NotesSection(),
-                ProfilePage()
-              ],
+              children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
               controller: pageController,
               onPageChanged: onPageChanged,
               physics: NeverScrollableScrollPhysics(),
@@ -109,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               activeColor: kPrimaryColor,
               items: [
                 BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-                BottomNavigationBarItem(icon: Icon(Icons.notifications)),
+                BottomNavigationBarItem(icon: Icon(Icons.library_books)),
                 BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
               ],
             ),

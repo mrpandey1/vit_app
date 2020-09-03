@@ -27,13 +27,8 @@ class _AddNotesState extends State<AddNotes> {
   bool _loading = false;
   bool foo = false;
 
-  List departments = ['All', 'INFT'];
-  List divisions = [
-    'All',
-    'A',
-    'B',
-  ];
-  List years = ['All', 'First', 'Second', 'Third', 'Fourth'];
+  List departments = ['INFT'];
+  List years = ['First', 'Second', 'Third', 'Fourth'];
   String departmentValue;
   String yearValue;
   String subjectValue;
@@ -323,6 +318,8 @@ class _AddNotesState extends State<AddNotes> {
       'from': _fromController.text,
       'subject': subjectValue,
       'fileName': fileName,
+      'year': yearValue,
+      'dept': departmentValue,
       'timestamp': DateTime.now(),
     });
 

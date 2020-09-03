@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/src/Shared/header.dart';
@@ -10,7 +8,7 @@ import 'package:vit_app/src/widgets/NoticeItem.dart';
 List<DocumentSnapshot> _list;
 
 class DepartmentPosts extends StatefulWidget {
-  String dept;
+  final String dept;
   DepartmentPosts({this.dept});
   @override
   _DepartmentPostsState createState() => _DepartmentPostsState();
