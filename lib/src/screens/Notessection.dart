@@ -127,6 +127,8 @@ class _NotesSectionState extends State<NotesSection> {
                       MaterialPageRoute(
                           builder: (context) => ShowNotes(
                                 subject: '${documentSnapshot.id}',
+                                dept: currentUser.dept,
+                                year: currentUser.year,
                               )),
                     )
                   },

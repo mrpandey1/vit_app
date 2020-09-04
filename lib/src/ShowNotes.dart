@@ -9,8 +9,9 @@ List<DocumentSnapshot> _list;
 
 class ShowNotes extends StatefulWidget {
   final String subject;
-
-  const ShowNotes({@required this.subject});
+  final String dept;
+  final String year;
+  const ShowNotes({@required this.subject, this.dept, this.year});
 
   @override
   _ShowNotesState createState() => _ShowNotesState();
@@ -29,9 +30,9 @@ class _ShowNotesState extends State<ShowNotes> {
       ),
       body: StreamBuilder(
         stream: notesRef
-            .doc(currentUser.dept)
+            .doc(widget.dept)
             .collection('Notes')
-            .doc(currentUser.year)
+            .doc(widget.year)
             .collection(widget.subject)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
@@ -41,7 +42,7 @@ class _ShowNotesState extends State<ShowNotes> {
           _list = snapshots.data.docs;
           return _list.length == 0
               ? Center(
-                  child: Text('No Notes For Now!'),
+                  child: Text('No notes available'),
                 )
               : ListView.builder(
                   itemCount: _list.length,

@@ -50,7 +50,7 @@ class _DepartmentNotesState extends State<DepartmentNotes> {
           ),
           yearValue != null
               ? Expanded(
-                  child: studentScreen(dept: widget.dept, year: yearValue),
+                  child: studentScreen(widget.dept, yearValue),
                 )
               : Container(
                   height: 0,
@@ -60,7 +60,7 @@ class _DepartmentNotesState extends State<DepartmentNotes> {
     );
   }
 
-  Widget studentScreen({String dept, String year}) {
+  Widget studentScreen(String dept, String year) {
     return Scaffold(
         body: FutureBuilder(
       future: subjectsRef.doc(dept).collection(yearValue).get(),
@@ -81,8 +81,9 @@ class _DepartmentNotesState extends State<DepartmentNotes> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ShowNotes(
-                                subject: '${documentSnapshot.id}',
-                              )),
+                              subject: '${documentSnapshot.id}',
+                              dept: dept,
+                              year: year)),
                     )
                   },
                   child: Container(
