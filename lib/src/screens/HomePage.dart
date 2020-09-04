@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
-  bool isAdmin = false;
   @override
   void initState() {
     super.initState();
@@ -42,19 +41,15 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       currentUser = VITUser.fromDocument(documentSnapshot);
-      if (!currentUser.isRegistered) {
-        Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
-      } else {
-        setState(() {
-          _loading = false;
-        });
-      }
+      // if (!currentUser.isRegistered) {
+      //   Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
+      // } else {
+      //   setState(() {
+      //     _loading = false;
+      //   });
+      // }
     });
     pageController = PageController(initialPage: 0);
-  }
-
-  adminOrNot(currentUser) {
-    return currentUser.admin;
   }
 
   @override
@@ -76,6 +71,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return buildUnregisteredScreen();
+  }
+
+  buildUnregisteredScreen() {
+    Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
+  }
+
+  Widget buildRegisteredScreen() {
     return _loading
         ? Scaffold(
             body: loadingScreen(),

@@ -210,7 +210,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
     );
   }
 
-  Future<void> registerUser() async {
+  registerUser() async {
     SnackBar failureSnackBar = SnackBar(
       content: Text('Roll number is already registered!'),
       backgroundColor: Colors.red,
@@ -234,7 +234,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
 
       await studentRef
           .doc(departmentValue)
-          .collection('$yearValue')
+          .collection(yearValue)
           .doc(currentUser.id)
           .set({
         ...documentSnapshot.data(),
