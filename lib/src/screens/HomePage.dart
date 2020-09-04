@@ -43,7 +43,10 @@ class _HomePageState extends State<HomePage> {
         .then((DocumentSnapshot documentSnapshot) {
       currentUser = VITUser.fromDocument(documentSnapshot);
       if (!currentUser.isRegistered) {
-        Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
+        Future(() => {
+              Navigator.push(
+                  context, BouncyPageRoute(widget: StudentRegistration()))
+            });
       } else {
         setState(() {
           _loading = false;
