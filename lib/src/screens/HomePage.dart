@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/src/Shared/loading.dart';
-import 'package:vit_app/src/animations/animatedPageRoute.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
-import 'package:vit_app/src/screens/StudentRegistration.dart';
 import 'package:vit_app/src/screens/Timeline.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
@@ -29,29 +27,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
   @override
   void initState() {
     super.initState();
-    userRef
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      currentUser = VITUser.fromDocument(documentSnapshot);
-      if (!currentUser.isRegistered) {
-        Future(() => {
-              Navigator.push(
-                  context, BouncyPageRoute(widget: StudentRegistration()))
-            });
-      } else {
-        setState(() {
-          _loading = false;
-        });
-      }
-    });
     pageController = PageController(initialPage: 0);
   }
 
@@ -74,31 +55,42 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return buildRegisteredScreen();
-  }
 
-  Widget buildRegisteredScreen() {
-    return _loading
-        ? Scaffold(
-            body: loadingScreen(),
-          )
-        : Scaffold(
-            body: PageView(
-              children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
-              controller: pageController,
-              onPageChanged: onPageChanged,
-              physics: NeverScrollableScrollPhysics(),
-            ),
-            bottomNavigationBar: CupertinoTabBar(
-              currentIndex: pageIndex,
-              onTap: onTap,
-              activeColor: kPrimaryColor,
-              items: [
-                BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-                BottomNavigationBarItem(icon: Icon(Icons.library_books)),
-                BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
-              ],
+    return FutureBuilder(
+      future: userRef.doc(FirebaseAuth.instance.currentUser.uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Scaffold(
+            body: Center(
+              child: SpinKitFoldingCube(
+                color: kPrimaryColor,
+                duration: Duration(seconds: 2),
+              ),
+
             ),
           );
+        }
+        currentUser = VITUser.fromDocument(snapshot.data);
+        return Scaffold(
+          body: PageView(
+            children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
+            controller: pageController,
+            onPageChanged: onPageChanged,
+            physics: NeverScrollableScrollPhysics(),
+          ),
+          bottomNavigationBar: CupertinoTabBar(
+            currentIndex: pageIndex,
+            onTap: onTap,
+            activeColor: kPrimaryColor,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+              BottomNavigationBarItem(icon: Icon(Icons.library_books)),
+              BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
