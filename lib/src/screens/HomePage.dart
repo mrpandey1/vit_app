@@ -41,13 +41,16 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       currentUser = VITUser.fromDocument(documentSnapshot);
-      // if (!currentUser.isRegistered) {
-      //   Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
-      // } else {
-      //   setState(() {
-      //     _loading = false;
-      //   });
-      // }
+      if (!currentUser.isRegistered) {
+        Future(() => {
+              Navigator.push(
+                  context, BouncyPageRoute(widget: StudentRegistration()))
+            });
+      } else {
+        setState(() {
+          _loading = false;
+        });
+      }
     });
     pageController = PageController(initialPage: 0);
   }
