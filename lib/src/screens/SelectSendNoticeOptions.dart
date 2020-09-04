@@ -23,7 +23,7 @@ class SelectSendNoticeOptions extends StatefulWidget {
 }
 
 class _SelectSendNoticeOptionsState extends State<SelectSendNoticeOptions> {
-  List departments = ['All', 'INFT'];
+  List departments = ['All', 'INFT', 'EXTC'];
   List divisions = [
     'All',
     'A',
