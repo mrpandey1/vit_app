@@ -3,15 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_app/src/Shared/loading.dart';
-import 'package:vit_app/src/animations/animatedPageRoute.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
-import 'package:vit_app/src/screens/StudentRegistration.dart';
 import 'package:vit_app/src/screens/Timeline.dart';
-import 'package:vit_app/src/shared/loading.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
 final studentRef = FirebaseFirestore.instance.collection('students');
@@ -70,8 +67,9 @@ class _HomePageState extends State<HomePage> {
         if (!snapshot.hasData) {
           return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(
-                backgroundColor: kPrimaryColor,
+              child: SpinKitFoldingCube(
+                color: kPrimaryColor,
+                duration: Duration(seconds: 2),
               ),
             ),
           );
