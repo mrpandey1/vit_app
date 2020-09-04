@@ -78,14 +78,13 @@ class _SignInSignUpPageState extends State<SignInSignUpPage> {
       String userId = '';
       try {
         if (_formState == STATE.SIGNIN) {
-          print(emailController.text + passwordController.text);
           userId = await widget.auth.signIn(
               emailController.text.trim(), passwordController.text.trim());
           emailVerified = await widget.auth.isEmailVerified();
           if (userId == null) {
             _scaffoldKey.currentState.showSnackBar(snackBar(context,
                 isErrorSnackbar: true,
-                errorText: 'Please verify your email if you have registered'));
+                errorText: 'Invalid credentials or email not verified '));
           } else {
             Navigator.pushReplacement(
                 context,
