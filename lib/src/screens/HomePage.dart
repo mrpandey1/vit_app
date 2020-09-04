@@ -74,11 +74,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return buildUnregisteredScreen();
-  }
-
-  buildUnregisteredScreen() {
-    Navigator.push(context, BouncyPageRoute(widget: StudentRegistration()));
+    return buildRegisteredScreen();
   }
 
   Widget buildRegisteredScreen() {
