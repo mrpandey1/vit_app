@@ -30,15 +30,10 @@ class _HomePageState extends State<HomePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
-  bool isAdmin = false;
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: 0);
-  }
-
-  adminOrNot(currentUser) {
-    return currentUser.admin;
   }
 
   @override
@@ -60,6 +55,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
       future: userRef.doc(FirebaseAuth.instance.currentUser.uid).get(),
       builder:
@@ -71,6 +67,7 @@ class _HomePageState extends State<HomePage> {
                 color: kPrimaryColor,
                 duration: Duration(seconds: 2),
               ),
+
             ),
           );
         }
