@@ -8,6 +8,7 @@ import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
+import 'package:vit_app/src/screens/StudentRegistration.dart';
 import 'package:vit_app/src/screens/Timeline.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
@@ -55,7 +56,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: userRef.doc(FirebaseAuth.instance.currentUser.uid).get(),
       builder:
@@ -67,29 +67,32 @@ class _HomePageState extends State<HomePage> {
                 color: kPrimaryColor,
                 duration: Duration(seconds: 2),
               ),
-
             ),
           );
         }
         currentUser = VITUser.fromDocument(snapshot.data);
-        return Scaffold(
-          body: PageView(
-            children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
-            controller: pageController,
-            onPageChanged: onPageChanged,
-            physics: NeverScrollableScrollPhysics(),
-          ),
-          bottomNavigationBar: CupertinoTabBar(
-            currentIndex: pageIndex,
-            onTap: onTap,
-            activeColor: kPrimaryColor,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
-              BottomNavigationBarItem(icon: Icon(Icons.library_books)),
-              BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
-            ],
-          ),
-        );
+        return currentUser.isRegistered
+            ? Scaffold(
+                body: PageView(
+                  children: <Widget>[TimeLine(), NotesSection(), ProfilePage()],
+                  controller: pageController,
+                  onPageChanged: onPageChanged,
+                  physics: NeverScrollableScrollPhysics(),
+                ),
+                bottomNavigationBar: CupertinoTabBar(
+                  currentIndex: pageIndex,
+                  onTap: onTap,
+                  activeColor: kPrimaryColor,
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.whatshot)),
+                    BottomNavigationBarItem(icon: Icon(Icons.library_books)),
+                    BottomNavigationBarItem(icon: Icon(Icons.account_circle)),
+                  ],
+                ),
+              )
+            : Scaffold(
+                body: StudentRegistration(),
+              );
       },
     );
   }
