@@ -5,10 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_app/main.dart';
 import 'package:vit_app/src/constants.dart';
+import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/Shared/header.dart';
 
+final userRef = FirebaseFirestore.instance.collection('users');
+
 class StudentRegistration extends StatefulWidget {
+  final VITUser currentUser;
+  StudentRegistration({this.currentUser});
   @override
   _StudentRegistrationState createState() => _StudentRegistrationState();
 }
@@ -230,12 +235,12 @@ class _StudentRegistrationState extends State<StudentRegistration> {
       _scaffoldKey.currentState.showSnackBar(failureSnackBar);
     } else {
       DocumentSnapshot documentSnapshot =
-          await userRef.doc(currentUser.id).get();
+          await userRef.doc(widget.currentUser.id).get();
 
       await studentRef
           .doc(departmentValue)
           .collection(yearValue)
-          .doc(currentUser.id)
+          .doc(widget.currentUser.id)
           .set({
         ...documentSnapshot.data(),
         'isRegistered': true,
@@ -246,7 +251,7 @@ class _StudentRegistrationState extends State<StudentRegistration> {
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',
       });
 
-      await userRef.doc(currentUser.id).update({
+      await userRef.doc(widget.currentUser.id).update({
         'isRegistered': true,
         'rollNumber':
             '$admissionYearValue${deptMap[departmentValue]}$divisionValue$roll',

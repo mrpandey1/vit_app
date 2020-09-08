@@ -8,6 +8,7 @@ import 'package:vit_app/src/constants.dart';
 import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/Notessection.dart';
 import 'package:vit_app/src/screens/Profile.dart';
+import 'package:vit_app/src/screens/StudentRegistration.dart';
 import 'package:vit_app/src/screens/Timeline.dart';
 
 final userRef = FirebaseFirestore.instance.collection('users');
@@ -22,6 +23,8 @@ final StorageReference storageRef = FirebaseStorage.instance.ref();
 VITUser currentUser;
 
 class HomePage extends StatefulWidget {
+  final VITUser user;
+  HomePage({this.user});
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -30,10 +33,19 @@ class _HomePageState extends State<HomePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
+  bool isRegisterd = false, isadmin = false;
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: 0);
+    getData();
+  }
+
+  getData() async {
+    setState(() {
+      isRegisterd = widget.user.isRegistered;
+      isadmin = widget.user.admin;
+    });
   }
 
   @override
@@ -55,7 +67,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    return widget.user.admin
+        ? buildRegisteredScreen()
+        : widget.user.isRegistered
+            ? buildRegisteredScreen()
+            : StudentRegistration(currentUser: widget.user);
+  }
 
+  Widget buildRegisteredScreen() {
     return FutureBuilder(
       future: userRef.doc(FirebaseAuth.instance.currentUser.uid).get(),
       builder:
@@ -67,7 +86,6 @@ class _HomePageState extends State<HomePage> {
                 color: kPrimaryColor,
                 duration: Duration(seconds: 2),
               ),
-
             ),
           );
         }
