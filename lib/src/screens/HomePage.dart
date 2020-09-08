@@ -23,8 +23,6 @@ final StorageReference storageRef = FirebaseStorage.instance.ref();
 VITUser currentUser;
 
 class HomePage extends StatefulWidget {
-  final VITUser user;
-  HomePage({this.user});
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -33,19 +31,10 @@ class _HomePageState extends State<HomePage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   PageController pageController;
   int pageIndex = 0;
-  bool isRegisterd = false, isadmin = false;
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: 0);
-    getData();
-  }
-
-  getData() async {
-    setState(() {
-      isRegisterd = widget.user.isRegistered;
-      isadmin = widget.user.admin;
-    });
   }
 
   @override

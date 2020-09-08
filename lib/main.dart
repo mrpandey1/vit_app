@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:vit_app/src/authentication/authentication.dart';
 import 'package:vit_app/src/constants.dart';
-import 'package:vit_app/src/model/user.dart';
 import 'package:vit_app/src/screens/HomePage.dart';
 import 'package:vit_app/src/screens/SignInSignUpPage.dart';
 
-final userRef = FirebaseFirestore.instance.collection('users');
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -39,11 +36,10 @@ class MyAppHome extends StatefulWidget {
 }
 
 class _MyAppHomeState extends State<MyAppHome> {
-  VITUser user;
-  User _user;
+  User _user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
-    _user = FirebaseAuth.instance.currentUser;
     super.initState();
     if (_user != null) {
       if (!_user.emailVerified) {
@@ -52,7 +48,7 @@ class _MyAppHomeState extends State<MyAppHome> {
           pushToSignInSignUp();
         });
       }
-      Future(() async {
+      Future(() {
         // ----------- EVERYTHING IS GOOD -----------
         pushToHomePage();
       });
@@ -81,14 +77,8 @@ class _MyAppHomeState extends State<MyAppHome> {
             builder: (context) => SignInSignUpPage(auth: widget.auth)));
   }
 
-  void pushToHomePage() async {
-    DocumentSnapshot snapshot = await userRef.doc(_user.uid).get();
-    user = VITUser.fromDocument(snapshot);
+  void pushToHomePage() {
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HomePage(
-                  user: user,
-                )));
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 }
